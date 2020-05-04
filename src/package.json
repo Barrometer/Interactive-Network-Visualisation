@@ -1,0 +1,11 @@
+{
+  "name": "interactive_network_visualiser",
+  "version": "0.0.1",
+  "description": "A tool for interactive network visualisation created as part of my final year project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT"
+}
