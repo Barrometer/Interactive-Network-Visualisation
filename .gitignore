@@ -10,3 +10,4 @@
 
 #js directories
 node_modules/
+dist/main.js
