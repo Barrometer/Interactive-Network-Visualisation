@@ -51,6 +51,12 @@ class NetworkNode{
     this._y = coords.y;
     this._z = coords.z;
   }
+  /**
+   * Returns the co-ordinates of the node as an array
+   */
+  getCoords(){
+    return [this._x,this._y,this._z];
+  }
 
   /**
    * Prints the NetworkNode
@@ -192,18 +198,44 @@ class Graph{
    */
   setCoords(nodeName,coords){
     if(this._nodes.has(nodeName)){
-      this._nodes.get(nodeName).setCoords(coords)
+      this._nodes.get(nodeName).setCoords(coords);
     }
   }
   /**
    * Applies a function to all nodes in Graph
-   * @param {func} callback 
-   * @param {object} args 
+   * @param {function} func 
    */
-  forEachNode(callback,args){
+  forEachNode(func){
+    let returnValues = []
     for (let value of this._nodes.values()){
-      callback.apply(this,value,args)
+      let temp = func(value);
+      returnValues.push(temp);
     }
+    return returnValues;
+  }
+  /**
+   * 
+   * @param {THREE.MeshBasicMaterial} meshMaterial 
+   */
+  createNodesToRender(meshMaterial){
+    let nodesToRender = [];
+    for (let value of this._nodes.values()){
+      let coords = value.getCoords();
+      let cube = new THREE.Mesh(THREE.BoxBufferGeometry( 1, 1, 1 ),meshMaterial);
+      cube.position.x = coords[0];
+      cube.position.y = coords[1];
+      cube.position.z = coords[2];
+      nodesToRender.push(cube);
+    }
+    return nodesToRender;
+  }
+  /**
+   * 
+   * @param {THREE.LineBasicMaterial} lineMaterial 
+   */
+  createLinesUndirectedToRender(lineMaterial){
+    let lines = [];
+    
   }
 }
 /**
@@ -215,6 +247,7 @@ function makeLinkName(from,to){
   return "linkFrom"+from+"To"+to;
 }
 
+
 let myGraph = new Graph();
 
 myGraph.addLink("NodeA","NodeB");
@@ -224,11 +257,9 @@ myGraph.addLink("NodeC","NodeA");
 myGraph.setCoords("NodeA",{x: 0, y: 10, z: 0})
 myGraph.setCoords("NodeB",{x: 5, y: 5, z: 0})
 myGraph.setCoords("NodeC",{x: -5, y: 5, z: 0})
-
-
 myGraph.print();
 
-/*
+
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
@@ -240,10 +271,7 @@ camera.lookAt( 0, 0, 0 );
 var scene = new THREE.Scene();
 
 var lineMaterial = new THREE.LineBasicMaterial( { color: 0x0000ff } );
-var meshMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );*/
-
-
-
-
-
+var meshMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+var cubes = myGraph.createNodesToRender(meshMaterial);
+cubes.forEach(cube => scene.add(cube));
 renderer.render( scene, camera );
