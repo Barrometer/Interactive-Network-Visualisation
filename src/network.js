@@ -1,346 +1,219 @@
-var THREE = require('three');
 
 /**
- * Nodes represent nodes within a graph
+ * This file provides the backing network model for the entire simulation
  */
-class NetworkNode{
-  /**
-   * Constructor for NetworkNode
-   * @param {string} name Unique Name for the NetworkNode
-   * @param {Number} x x co-ord
-   * @param {Number} y y co-ord
-   * @param {Number} z z co-ord
-   * @param {object} data data object for NetworkNode
-   */
-  constructor(name,x,y,z,data){
-    this._name = name; //unique
-    this._x = x;
-    this._y = y;
-    this._z = z;
-    this._data = data;
-    this._hidden = false;
-  }
-  /**
-   * Hides the NetworkNode
-   */
-  hide(){
-    this._hidden = true;
-  }
-  /**
-   * Unhides NetworkNode
-   */
-  unhide(){
-    this._hidden =  false;
-  }
-  /**
-   * Assigns the given data to the NetworkNode
-   * @param {object} data
-   */
-  setData(data){
-    this._data = data;
-  }
-  /**
-   * 
-   * @param {object} coords the new co-ordinates of the point
-   * @param {number} coords.x the x co-ordinate
-   * @param {number} coords.y the y co-ordinate
-   * @param {number} coords.z the z co-ordinate
-   */
-  setCoords(coords){
-    this._x = coords.x;
-    this._y = coords.y;
-    this._z = coords.z;
-  }
-  /**
-   * Returns the co-ordinates of the node as an array
-   */
-  getCoords(){
-    return [this._x,this._y,this._z];
-  }
 
-  /**
-   * Prints the NetworkNode
-   */
-  print(){
-    console.log("Name = " + this._name);
-    if (this._hidden){
-      console.log("Node hidden");
-    }
-    else{
-      console.log("Node visible");
-    }
-    console.log("x = " + this._x + " y = " + this._y + " z = " + this._z);
 
-    for (const property in this._data){
-      console.log(`${property}: ${this._data[property]}`);
+ /**
+  * @typedef {Object} Coordinate
+  * @property {number} x - The x coordinate
+  * @property {number} y - The y coordinate
+  * @property {number} z - The z coordinate
+  */
+/**
+ * @typedef {Object} nameCoordPair
+ * @property {string} name - The name of the Node
+ * @property {Coordinate} coords - The coordinate of the Node
+ * @property {number} coords.x - The x coordinate
+ * @property {number} coords.y - The y coordinate
+ * @property {number} coords.z - The z coordinate
+ */
+class networkNode {
+  /**
+  *
+  * @param {string} nodeName The name of the node
+  * @param {object} nodeCoords Object describing the position of the node
+  * @param {number} nodeCoords.x
+  * @param {number} nodeCoords.y
+  * @param {number} nodeCoords.z
+  * @param {object} nodeData Object containing all other data associated with this node
+  */
+  constructor(nodeName, nodeCoords, nodeData) {
+    this.name = nodeName;
+    this.coords = nodeCoords;
+    this.data = nodeData;
+  }
+  print() {
+    console.log("Node named " + this.name + " at co-ordinates [" +
+    this.coords.x + ", " + this.coords.y + ", " + this.coords.z +
+    "]")
+    for (const property in this.data) {
+      console.log(`${property}: ${this.data[property]}`);
     }
   }
 }
-/**
- * Links are inherently directional
- * Links consist of a unique id, and a record of which two NetworkNodes are joint
- */
-class NetworkLink{
+function makeLinkName(nodeNameFrom, nodeNameTo) {
+  return "linkFrom_" + nodeNameFrom + "_To_" + nodeNameTo;
+}
+class networkLink{
   /**
-   * Constructor for Link
-   * @param {string} nodeFrom Name of NetworkNode the link starts at
-   * @param {string} nodeTo Name of NetworkNode the link ends at
+   * Make a networkLink
+   * @param {string} nodeNameFrom 
+   * @param {string} nodeNameTo 
    */
-  constructor(linkName,nodeFrom,nodeTo){
-    this._name = linkName;
-    this._from = nodeFrom;
-    this._to = nodeTo;
+  constructor( nodeNameFrom, nodeNameTo ) {
+    this.name = makeLinkName(nodeNameFrom , nodeNameTo);
+    this.from = nodeNameFrom;
+    this.to = nodeNameTo;
   }
-  print(){
-    console.log("NetworkLink name = " +this._name);
-    console.log("Links from " + this._from + " to " + this._to);
-  }
-  /**
-   * Retuns the names of the two linked Nodes as {to,from}
-   */
-  getNamesOfLinked(){
-    return {from: this._from, to: this._to}
+  print() {
+    console.log(`Link called ${this.name}, links from ${this.from} to ${this.to}`)
   }
 }
-/** 
- * Graph is the main class to be instantiated
- * Graph keeps track of NetworkNode, and NetworkLinks
- * Graph has functions to filter nodes based on NetworkNode data
- * Graph has funcstions to import and to save
- * Graph has functions to add new NetworkNode, modify data of NetworkNode
-*/
-class Graph{
+
+export class networkGraph{
   constructor(){
-      this._nodes = new Map();
-      this._links = new Map();
-  }
-  toJSON(){
-    let nodesObj = strMapToObj(this._nodes);
-    let linksObj = strMapToObj(this._links);
-    return {nodes: nodesObj,links: linksObj};
-  }
-  load(jsonData){
-    let entireObject = JSON.parse(jsonData);
-    console.log("\n\n");
-    let nodesObj = entireObject.nodes || {};
-    console.log(nodesObj);
-    let linksObj = entireObject.links || {}
-    console.log(linksObj);
-    this._nodes.clear();
-    this._links.clear();
-    for (const node in nodesObj){
-      let nodeToAdd = nodesObj[node];
-      this.addNode(nodeToAdd._name,nodeToAdd._data,nodeToAdd._x,nodeToAdd._y,nodeToAdd._z);
-    }
-    for (const link in linksObj){
-      let linkToAdd = linksObj[link];
-      this.addLink(linkToAdd._from,linkToAdd._to);
-    }
+    /**
+     * A map from string to networkNode
+     * @type {Map<String,networkNode>}
+     */
+    this.nodes = new Map(); //maps strings to networkNodes
+    /**
+     * A map from string to networkLink
+     * @type {Map<String,networkLink>}
+     */
+    this.links = new Map(); 
   }
   /**
-   * Creates a new node with given name and data if does not exist
-   * @param {string} name name of node
-   * @param {object} data data of node
-   */
-  addNode(name, data, x, y, z){
-    //if node does not exist, give it unique id and add it
-    data = data || {};
-    x = x || 0
-    y = y || 0
-    z = z || 0
-    if(! this._nodes.has (name)){
-      let nodeToAdd = new NetworkNode(name,x,y,z,data); //location needs tweaking
-      this._nodes.set(name,nodeToAdd);
-      console.log("Registered new node named " +name);
-    }
-    else{
-      console.log("Node named " + name +" already in network");
-    }
-  }
-  /**
-   * Creates a link between two nodes if the link does not exist. Will create nodes with empty data if needed
-   * @param {string} nodeFrom name of node thelink points from
-   * @param {string} nodeTo name of node the link points to
-   */
-  addLink(nodeFrom,nodeTo){
-    this.addNode(nodeFrom);
-    this.addNode(nodeTo);
-    let linkName = makeLinkName(nodeFrom,nodeTo);
-    if(! this._nodes.has(linkName)){
-      let linkToAdd = new NetworkLink(linkName,nodeFrom,nodeTo);
-      this._links.set(linkName,linkToAdd);
-      console.log("Added a new link called "+ linkName + ", from node named " + nodeFrom + " to " + nodeTo);
-    }
-    else{
-      console.log("Link called "+ linkName+ ", from node named " + nodeFrom + " to " + nodeTo + " already in network");
-    }
-  }
-  /**
-   * Sets the data for a specific node. Does not create a new node if it does not exist
-   * Returns 1 on successful update, 0 otherwise
-   * @param {string} nodeName name of node to modify
-   * @param {object} data data value to set
-   */
-  setNodeData(nodeName,data){
-    if(this._nodes.has(nodeName)){
-      this._nodes.get(nodeName).setData(data);
-      console.log("Updated node named "+nodeName);
+  * If there is not a node by this name in the network, adds it to the network
+  * If there is already such a node, does nothing
+  * Returns 1 on added node, 0 otherwise
+  * @param {string} nodeName The name of the node
+  * @param {object} nodeCoords Object describing the position of the node
+  * @param {number} nodeCoords.x
+  * @param {number} nodeCoords.y
+  * @param {number} nodeCoords.z
+  * @param {object} nodeData Object containing all other data associated with this node
+  */
+  addNode(nodeName,nodeCoords,nodeData) {
+    nodeCoords = nodeCoords || {x: 0, y: 0, z: 0}
+    if (!this.nodes.has(nodeName)) {
+      let nodeToAdd = new networkNode(nodeName, nodeCoords, nodeData);
+      this.nodes.set(nodeName, nodeToAdd);
       return 1;
     }
-    else{
-      console.log("Node does not exist, did not update");
+    else {
       return 0;
     }
   }
-  print(){
-    for(let [key,value] of this._nodes){
-      console.log("Key : " + key);
-      value.print();
+  /**
+   * Adds a link between two networkNodes if one does not exist. Will also add new networkNode if required
+   * Returns 1 on added link, 0 otherwise
+   * @param {string} nodeNameFrom 
+   * @param {string} nodeNameTo 
+   */
+  addLink(nodeNameFrom,nodeNameTo) {
+    let nameOfLink = makeLinkName(nodeNameFrom, nodeNameTo);
+    if (!this.links.has(nameOfLink)) {
+      this.addNode(nodeNameFrom);
+      this.addNode(nodeNameTo);
+      let linkToAdd = new networkLink(nodeNameFrom, nodeNameTo);
+      this.links.set(nameOfLink,linkToAdd);
+      return 1;
     }
-    for(let [key,value] of this._links){
-      console.log("Key : " + key);
-      value.print();
+    else {
+      return 0;
     }
   }
   /**
-   * If a node in the graph exists with the given name, returns a reference to it, else returns null
+   * Returns an array containing all the names of links a node is in. If the 
+   * node is not in the network or is not in the links this array is empty
    * @param {string} nodeName 
    */
-  getNode(nodeName){
-    if(this._nodes.has(nodeName)){
-      return this._nodes.get(nodeName);
+  findLinksWithNodeIn(nodeName) {
+    let linksWithNodeIn = [];
+    if(this.nodes.has(nodeName)) {
+      for (let [key, value] of this.links) {
+        if ((value.from == nodeName) || (value.to == nodeName)){
+          linksWithNodeIn.push(key)
+        }
+      }
     }
-    else{
-      return null;
-    }
+    return linksWithNodeIn;
   }
   /**
-   * If a NetworkNode exists, updates it's co-ordinates
+   * If a node exists in the network, sets it's coords to the specified values
+   * Does not update
    * @param {string} nodeName 
-   * @param {object} coords
-   * @param {number} coords.x the x co-ordinate
-   * @param {number} coords.y the y co-ordinate
-   * @param {number} coords.z the z co-ordinate
+   * @param {object} newNodeCoords
+   * @param {number} newNodeCoords.x
+   * @param {number} newNodeCoords.y
+   * @param {number} newNodeCoords.z 
    */
-  setCoords(nodeName,coords){
-    if(this._nodes.has(nodeName)){
-      this._nodes.get(nodeName).setCoords(coords);
+  updateNodeCoords(nodeName, newNodeCoords) {
+    if(this.nodes.has(nodeName)) {
+      let nodeToUpdate = this.nodes.get(nodeName);
+      nodeToUpdate.coords = newNodeCoords;
     }
   }
-  /**
-   * Applies a function to all nodes in Graph
-   * @param {function} func 
-   */
-  forEachNode(func){
-    let returnValues = []
-    for (let value of this._nodes.values()){
-      let temp = func(value);
-      returnValues.push(temp);
-    }
-    return returnValues;
-  }
-  /**
-   * 
-   * @param {THREE.MeshBasicMaterial} meshMaterial 
-   */
-  getNodeCoords(){
-    let nodeCoordsArray = [];
-    for (let value of this._nodes.values()){
-      let coords = value.getCoords();
-      nodeCoordsArray.push(coords);
-    }
-    return nodeCoordsArray;
-  }
-  /**
-   * Returns an array of {coordsfrom,coordsto}
-   */
-  getLineCoords(){
-    let linePairsArray = [];
-    for (let value of this._links.values()){
-        let namesOfLinked = value.getNamesOfLinked();
-        let toCoords = this._nodes.get(namesOfLinked.to).getCoords();
-        let fromCoords = this._nodes.get(namesOfLinked.from).getCoords();
-        let coordPair ={from: fromCoords, to: toCoords}
-
-        linePairsArray.push(coordPair);
-    }
-    return linePairsArray
-  }
-}
 /**
- * Function to make name for a link by combining names of strings
- * @param {string} from 
- * @param {string} to 
+ * Updates an existing node with new data. Properties in the networkNode.data
+ * that are not in newNodeData will not be altered
+ * @param {string} nodeName 
+ * @param {object} newNodeData 
  */
-function makeLinkName(from,to){
-  return "linkFrom"+from+"To"+to;
-}
-function strMapToObj(strMap){
-  let obj ={};
-  for (let [key,value] of strMap){
-    obj[key] = value;
+  updateNodeData(nodeName,newNodeData) {
+    if(this.nodes.has(nodeName)) {
+      let nodeToUpdate = this.nodes.get(nodeName);
+      Object.assign(nodeToUpdate.data,newNodeData);
+    }
   }
-  return obj;
+  /**
+   * Prints out the networkGraph in a pretty format
+   */
+  print() {
+      for (let [key,value] of this.nodes) {
+        console.log(`Key: ${key}`);
+        value.print();
+      }
+      for (let [key,value] of this.links) {
+        console.log(`Key: ${key}`);
+        value.print();
+      }
+  }
+  /**
+   * Returns an array of objs consisting of all the nodes names and strings
+   */
+  getNodeNamesAndCoords() {
+    let result = [];
+    for (let value of this.nodes.values()) {
+      let nameOfNode = value.name;
+      let coordsOfNode = value.coords;
+      let obj = {name: nameOfNode, coords: coordsOfNode};
+      result.push(obj);
+    }
+    return result;
+  }
+  /**
+   * returns an array of Objects, consisting of the name of the link and the
+   * coordinates of the two ends
+   */
+  getLineNamesAndCoords() {
+    let result = [];
+    for (let value of this.links.values()) {
+      let nameOfLink =  value.name;
+      let fromCoords = this.nodes.get(value.from).coords;
+      let toCoords = this.nodes.get(value.to).coords;
+      let obj = {name: nameOfLink, coordsTo: toCoords, coordsFrom: fromCoords};
+      result.push(obj);
+    }
+    return result; 
+  }
 }
-
-let myGraph = new Graph();
-let jsonObj = {"nodes":{"NodeA":{"_name":"NodeA","_x":0,"_y":10,"_z":0,"_data":{"age":10,"cited":5},"_hidden":false},"NodeB":{"_name":"NodeB","_x":5,"_y":5,"_z":0,"_data":{},"_hidden":false},"NodeC":{"_name":"NodeC","_x":-5,"_y":5,"_z":0,"_data":{},"_hidden":false}},"links":{"linkFromNodeAToNodeB":{"_name":"linkFromNodeAToNodeB","_from":"NodeA","_to":"NodeB"},"linkFromNodeCToNodeA":{"_name":"linkFromNodeCToNodeA","_from":"NodeC","_to":"NodeA"}}};
-let jsonString = JSON.stringify(jsonObj);
-console.log(jsonObj);
-myGraph.load(jsonString)
-myGraph.print();
 /*
+let myGraph = new networkGraph();
+myGraph.addNode("NodeA",{x: 10, y: 0, z: 0},{foo: "bar"});
+myGraph.addNode("NodeB",{x: 10, y: 5, z: 0},{foo: "yay"});
+myGraph.addNode("NodeC",{x: 10, y: 10, z: 0},{});
+myGraph.addNode("NodeD",{x: 10, y: 15, z: 0},{});
+myGraph.addNode("NodeE",{x: 10, y: 20, z: 0},{});
+
 myGraph.addLink("NodeA","NodeB");
-myGraph.setNodeData("NodeA",{age: 10, cited: 5})
-myGraph.addNode("NodeC");
-myGraph.addLink("NodeC","NodeA");
-myGraph.setCoords("NodeA",{x: 0, y: 10, z: 0})
-myGraph.setCoords("NodeB",{x: 5, y: 5, z: 0})
-myGraph.setCoords("NodeC",{x: -5, y: 5, z: 0})
+myGraph.addLink("NodeE","NodeB");
+
+myGraph.updateNodeCoords("NodeE",{x:2,y:2,z:2});
+
 myGraph.print();
 
-let graphAsJSON = JSON.stringify(myGraph);
-console.log("\n\n");
-console.log(graphAsJSON)
-console.log("\n\n");
-let secondGraph = new Graph();
-secondGraph.load(graphAsJSON);
-myGraph.print();*/
-//console.log(jsonToObj.nodes.NodeA); 
-
-/*var renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
-
-var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 500 );
-camera.position.set( 0, 0, 100 );
-camera.lookAt( 0, 0, 0 );
-
-var scene = new THREE.Scene();
-
-var lineMaterial = new THREE.LineBasicMaterial( { color: 0x0000ff } );
-var meshMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-var meshGeometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
-var arryNodeCoords = myGraph.getNodeCoords();
-var arrayLineCoords = myGraph.getLineCoords()
-//var nodeCubes = []
-function coordsToRenderedNodes(value){
-  var cube = new THREE.Mesh( meshGeometry, meshMaterial );
-  cube.position.x = value[0];
-  cube.position.y = value[1];
-  cube.position.z = value[2];
-  scene.add(cube);
-}
-function coordsToRenderedLines(value){
-  var to = value.to;
-  var from = value.from;
-  var dir =  new THREE.Vector3(to[0]-from[0],to[1]-from[1],to[2]-from[2]);
-  var length = dir.length();
-  dir.normalize();
-  var origin = new THREE.Vector3(from[0],from[1],from[2]);
-  var arrow =  new THREE.ArrowHelper(dir,origin,length,0x0000ff);
-  scene.add(arrow);
-}
-arryNodeCoords.forEach(coordsToRenderedNodes);
-arrayLineCoords.forEach(coordsToRenderedLines);
-renderer.render( scene, camera );*/
+var foo = myGraph.findLinksWithNodeIn("NodeB");
+console.log(foo);*/
