@@ -121,15 +121,20 @@ class Graph{
   }
   load(jsonData){
     let entireObject = JSON.parse(jsonData);
+    console.log("\n\n");
     let nodesObj = entireObject.nodes || {};
+    console.log(nodesObj);
     let linksObj = entireObject.links || {}
+    console.log(linksObj);
     this._nodes.clear();
     this._links.clear();
     for (const node in nodesObj){
-      this.addNode(node._name,node._data,node._x,node._y,node._z);
+      let nodeToAdd = nodesObj[node];
+      this.addNode(nodeToAdd._name,nodeToAdd._data,nodeToAdd._x,nodeToAdd._y,nodeToAdd._z);
     }
     for (const link in linksObj){
-      this.addLink(link._from,link._to);
+      let linkToAdd = linksObj[link];
+      this.addLink(linkToAdd._from,linkToAdd._to);
     }
   }
   /**
@@ -280,8 +285,10 @@ function strMapToObj(strMap){
 
 let myGraph = new Graph();
 let jsonObj = {"nodes":{"NodeA":{"_name":"NodeA","_x":0,"_y":10,"_z":0,"_data":{"age":10,"cited":5},"_hidden":false},"NodeB":{"_name":"NodeB","_x":5,"_y":5,"_z":0,"_data":{},"_hidden":false},"NodeC":{"_name":"NodeC","_x":-5,"_y":5,"_z":0,"_data":{},"_hidden":false}},"links":{"linkFromNodeAToNodeB":{"_name":"linkFromNodeAToNodeB","_from":"NodeA","_to":"NodeB"},"linkFromNodeCToNodeA":{"_name":"linkFromNodeCToNodeA","_from":"NodeC","_to":"NodeA"}}};
-
-myGraph.load(jsonObj)
+let jsonString = JSON.stringify(jsonObj);
+console.log(jsonObj);
+myGraph.load(jsonString)
+myGraph.print();
 /*
 myGraph.addLink("NodeA","NodeB");
 myGraph.setNodeData("NodeA",{age: 10, cited: 5})
