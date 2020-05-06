@@ -95,6 +95,12 @@ class NetworkLink{
     console.log("NetworkLink name = " +this._name);
     console.log("Links from " + this._from + " to " + this._to);
   }
+  /**
+   * Retuns the names of the two linked Nodes as {to,from}
+   */
+  getNamesOfLinked(){
+    return {from: this._from, to: this._to}
+  }
 }
 /** 
  * Graph is the main class to be instantiated
@@ -217,25 +223,28 @@ class Graph{
    * 
    * @param {THREE.MeshBasicMaterial} meshMaterial 
    */
-  createNodesToRender(meshMaterial){
-    let nodesToRender = [];
+  getNodeCoords(){
+    let nodeCoordsArray = [];
     for (let value of this._nodes.values()){
       let coords = value.getCoords();
-      let cube = new THREE.Mesh(THREE.BoxBufferGeometry( 1, 1, 1 ),meshMaterial);
-      cube.position.x = coords[0];
-      cube.position.y = coords[1];
-      cube.position.z = coords[2];
-      nodesToRender.push(cube);
+      nodeCoordsArray.push(coords);
     }
-    return nodesToRender;
+    return nodeCoordsArray;
   }
   /**
-   * 
-   * @param {THREE.LineBasicMaterial} lineMaterial 
+   * Returns an array of {coordsfrom,coordsto}
    */
-  createLinesUndirectedToRender(lineMaterial){
-    let lines = [];
-    
+  getLineCoords(){
+    let linePairsArray = [];
+    for (let value of this._links.values()){
+        let namesOfLinked = value.getNamesOfLinked();
+        let toCoords = this._nodes.get(namesOfLinked.to).getCoords();
+        let fromCoords = this._nodes.get(namesOfLinked.from).getCoords();
+        let coordPair ={from: fromCoords, to: toCoords}
+
+        linePairsArray.push(coordPair);
+    }
+    return linePairsArray
   }
 }
 /**
@@ -272,6 +281,27 @@ var scene = new THREE.Scene();
 
 var lineMaterial = new THREE.LineBasicMaterial( { color: 0x0000ff } );
 var meshMaterial = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-var cubes = myGraph.createNodesToRender(meshMaterial);
-cubes.forEach(cube => scene.add(cube));
+var meshGeometry = new THREE.BoxBufferGeometry( 1, 1, 1 );
+var arryNodeCoords = myGraph.getNodeCoords();
+var arrayLineCoords = myGraph.getLineCoords()
+//var nodeCubes = []
+function coordsToRenderedNodes(value){
+  var cube = new THREE.Mesh( meshGeometry, meshMaterial );
+  cube.position.x = value[0];
+  cube.position.y = value[1];
+  cube.position.z = value[2];
+  scene.add(cube);
+}
+function coordsToRenderedLines(value){
+  var to = value.to;
+  var from = value.from;
+  var dir =  new THREE.Vector3(to[0]-from[0],to[1]-from[1],to[2]-from[2]);
+  var length = dir.length();
+  dir.normalize();
+  var origin = new THREE.Vector3(from[0],from[1],from[2]);
+  var arrow =  new THREE.ArrowHelper(dir,origin,length,0x0000ff);
+  scene.add(arrow);
+}
+arryNodeCoords.forEach(coordsToRenderedNodes);
+arrayLineCoords.forEach(coordsToRenderedLines);
 renderer.render( scene, camera );
