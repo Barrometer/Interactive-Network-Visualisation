@@ -1,23 +1,7 @@
-
 /**
  * This file provides the backing network model for the entire simulation
  */
 
-
- /**
-  * @typedef {Object} Coordinate
-  * @property {number} x - The x coordinate
-  * @property {number} y - The y coordinate
-  * @property {number} z - The z coordinate
-  */
-/**
- * @typedef {Object} nameCoordPair
- * @property {string} name - The name of the Node
- * @property {Coordinate} coords - The coordinate of the Node
- * @property {number} coords.x - The x coordinate
- * @property {number} coords.y - The y coordinate
- * @property {number} coords.z - The z coordinate
- */
 class networkNode {
   /**
   *
@@ -61,7 +45,7 @@ class networkLink{
   }
 }
 
-export class networkGraph{
+exports.networkGraph = class {
   constructor(){
     /**
      * A map from string to networkNode
@@ -199,21 +183,45 @@ export class networkGraph{
     }
     return result; 
   }
+  /**
+   * Overload for use with JSON.stringify()
+   */
+  toJSON() {
+    let nodesObj = strMapToObj(this.nodes);
+    let linksObjs = strMapToObj(this.links);
+
+    return {nodes: nodesObj, links: linksObjs};
+  }
+  /**
+   * 
+   * @param {string} stringifiedJSONData 
+   */
+  load(stringifiedJSONData){
+    let entireObject = JSON.parse(stringifiedJSONData);
+    let nodesObj = entireObject.nodes || {};
+    let linksObj = entireObject.links || {};
+
+    this.nodes.clear();
+    this.links.clear();
+
+    for (const node in nodesObj){
+      let nodeToAdd = nodesObj[node];
+      this.addNode(nodeToAdd.name,nodeToAdd.coords,nodeToAdd.data);
+    }
+    for (const link in linksObj){
+      let linkToAdd = linksObj[link];
+      this.addLink(linkToAdd.from,linkToAdd.to);
+    }
+  }
+};
+/**
+ * Function to convert Map with string key to an object
+ * @param {Map<String,*>} strMap 
+ */
+function strMapToObj(strMap){
+  let obj ={};
+  for (let [key,value] of strMap){
+    obj[key] = value;
+  }
+  return obj;
 }
-/*
-let myGraph = new networkGraph();
-myGraph.addNode("NodeA",{x: 10, y: 0, z: 0},{foo: "bar"});
-myGraph.addNode("NodeB",{x: 10, y: 5, z: 0},{foo: "yay"});
-myGraph.addNode("NodeC",{x: 10, y: 10, z: 0},{});
-myGraph.addNode("NodeD",{x: 10, y: 15, z: 0},{});
-myGraph.addNode("NodeE",{x: 10, y: 20, z: 0},{});
-
-myGraph.addLink("NodeA","NodeB");
-myGraph.addLink("NodeE","NodeB");
-
-myGraph.updateNodeCoords("NodeE",{x:2,y:2,z:2});
-
-myGraph.print();
-
-var foo = myGraph.findLinksWithNodeIn("NodeB");
-console.log(foo);*/
