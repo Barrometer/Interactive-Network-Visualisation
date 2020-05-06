@@ -114,22 +114,37 @@ class Graph{
       this._nodes = new Map();
       this._links = new Map();
   }
-  save(){
-
+  toJSON(){
+    let nodesObj = strMapToObj(this._nodes);
+    let linksObj = strMapToObj(this._links);
+    return {nodes: nodesObj,links: linksObj};
   }
-  load(){
-
+  load(jsonData){
+    let entireObject = JSON.parse(jsonData);
+    let nodesObj = entireObject.nodes || {};
+    let linksObj = entireObject.links || {}
+    this._nodes.clear();
+    this._links.clear();
+    for (const node in nodesObj){
+      this.addNode(node._name,node._data,node._x,node._y,node._z);
+    }
+    for (const link in linksObj){
+      this.addLink(link._from,link._to);
+    }
   }
   /**
    * Creates a new node with given name and data if does not exist
    * @param {string} name name of node
    * @param {object} data data of node
    */
-  addNode(name, data){
+  addNode(name, data, x, y, z){
     //if node does not exist, give it unique id and add it
     data = data || {};
+    x = x || 0
+    y = y || 0
+    z = z || 0
     if(! this._nodes.has (name)){
-      let nodeToAdd = new NetworkNode(name,0,0,0,data); //location needs tweaking
+      let nodeToAdd = new NetworkNode(name,x,y,z,data); //location needs tweaking
       this._nodes.set(name,nodeToAdd);
       console.log("Registered new node named " +name);
     }
@@ -143,8 +158,8 @@ class Graph{
    * @param {string} nodeTo name of node the link points to
    */
   addLink(nodeFrom,nodeTo){
-    this.addNode(nodeFrom,{});
-    this.addNode(nodeTo,{});
+    this.addNode(nodeFrom);
+    this.addNode(nodeTo);
     let linkName = makeLinkName(nodeFrom,nodeTo);
     if(! this._nodes.has(linkName)){
       let linkToAdd = new NetworkLink(linkName,nodeFrom,nodeTo);
@@ -255,10 +270,19 @@ class Graph{
 function makeLinkName(from,to){
   return "linkFrom"+from+"To"+to;
 }
-
+function strMapToObj(strMap){
+  let obj ={};
+  for (let [key,value] of strMap){
+    obj[key] = value;
+  }
+  return obj;
+}
 
 let myGraph = new Graph();
+let jsonObj = {"nodes":{"NodeA":{"_name":"NodeA","_x":0,"_y":10,"_z":0,"_data":{"age":10,"cited":5},"_hidden":false},"NodeB":{"_name":"NodeB","_x":5,"_y":5,"_z":0,"_data":{},"_hidden":false},"NodeC":{"_name":"NodeC","_x":-5,"_y":5,"_z":0,"_data":{},"_hidden":false}},"links":{"linkFromNodeAToNodeB":{"_name":"linkFromNodeAToNodeB","_from":"NodeA","_to":"NodeB"},"linkFromNodeCToNodeA":{"_name":"linkFromNodeCToNodeA","_from":"NodeC","_to":"NodeA"}}};
 
+myGraph.load(jsonObj)
+/*
 myGraph.addLink("NodeA","NodeB");
 myGraph.setNodeData("NodeA",{age: 10, cited: 5})
 myGraph.addNode("NodeC");
@@ -268,8 +292,16 @@ myGraph.setCoords("NodeB",{x: 5, y: 5, z: 0})
 myGraph.setCoords("NodeC",{x: -5, y: 5, z: 0})
 myGraph.print();
 
+let graphAsJSON = JSON.stringify(myGraph);
+console.log("\n\n");
+console.log(graphAsJSON)
+console.log("\n\n");
+let secondGraph = new Graph();
+secondGraph.load(graphAsJSON);
+myGraph.print();*/
+//console.log(jsonToObj.nodes.NodeA); 
 
-var renderer = new THREE.WebGLRenderer();
+/*var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
@@ -304,4 +336,4 @@ function coordsToRenderedLines(value){
 }
 arryNodeCoords.forEach(coordsToRenderedNodes);
 arrayLineCoords.forEach(coordsToRenderedLines);
-renderer.render( scene, camera );
+renderer.render( scene, camera );*/
