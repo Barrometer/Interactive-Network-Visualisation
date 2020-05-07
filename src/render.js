@@ -4,16 +4,18 @@
  */
 import * as THREE from 'three';
 var network = require("./network")
-//import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
-
+var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 500 );
+
 camera.position.set( 0, 0, 100 );
 camera.lookAt( 0, 0, 0 );
+var controls = new OrbitControls( camera, renderer.domElement );
+controls.update();
 
-var scene = new THREE.Scene();
 
 var myGraph = new network.networkGraph();
 myGraph.addNode("NodeA",{x: 15, y: 5, z: 0},{});
@@ -55,4 +57,14 @@ function coordsToRenderedArrows(nameAndCoords) {
 }
 nodeNamesAndCoords.forEach(coordsToRenderedNodes);
 lineNamesAndCoords.forEach(coordsToRenderedArrows);
-renderer.render( scene, camera );
+function animate() {
+
+	requestAnimationFrame( animate );
+
+	// required if controls.enableDamping or controls.autoRotate are set to true
+	controls.update();
+
+	renderer.render( scene, camera );
+
+}
+animate();
