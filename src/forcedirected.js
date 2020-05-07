@@ -1,39 +1,14 @@
 /**
- * A file to apply a force directed graph drawing algorithm
+ * A file defining a variety of force directed algorithms
  * 
- * Most basic algorithm at core:
- *  1. Calculate Force on each vertex
- *  2. Move each vertex
- *  3. Repeat n times
- * This is inefficient but simple
- * 
- * More complicated algorithms alter both attractions / repulsive force
- * Some algorithms use Barnes-Hut simultion of distant forces to reduce time complexity
  */
-
- /*
-Pseudocode:
-  Take Graph:
-    For M:
-      For each node in graph:
-        Calculate Forces:
-          for links in node
-            Force += c1 * log(link.length/c2)
-          for other nodes in graph
-            Force += c3 / nodes.distance^2
-      move all vertices c4 * force on vertex      
- */
-
- /*
- Other thoughts:
- Forces have magnitude and direction. Direction is normalised vector between nodes. 
- When force is attractive, dir is node2.pos - node1.pos. When force is repulsive, dir is node1.pos-node2.pos
- */
-
 var network = require("./network");
 
 /**
- * Implements a force simulator based on Eades
+ * Implements a force simulator based on Eades mechanical model
+ * Attractive force is only between connected nodes, = c1*log(c2/d)
+ * Repulsive force between all nodes, = c3/d**2
+ * Moves nodes c4*total force on node
  */
 class eadesForceSimulator{
   /**
@@ -60,6 +35,7 @@ class eadesForceSimulator{
       If connected, attract
       Also repel
     */
+   
    let forcesArray = [];
     for (let[key1,node1] of graph.nodes) {
       let forceOnNode = {x: 0, y:0, z: 0};
@@ -69,16 +45,39 @@ class eadesForceSimulator{
         if(key1 != key2) { //this should prevent calculating the force of a node on itself
           let node2Position = node2.coords;
           let vec1To2 = sub3DVector(node2Position,node1Position);
-          let distance = length3dVector(vec1To2);
+          let vec2To1 = sub3DVector(node1Position,node2Position);
+          let distance = length3DVector(vec1To2);
+          let currentForce = {x: 0, y:0, z: 0};
+          normalise3DVector(vec1To2);
+          normalise3DVector(vec2To1);
           distance = Math.max(distance,0.01); //if too close just pretend they're not
           //if connected attract
           if (nodesConnectedtoNode1.includes(node2)) {
             //do some maths
+            let attractionMagnitude = this.c1 * Math.log10(distance/this.c2);
+            let forceTowardsN2 = scalarTimes3DVector(attractionMagnitude,vec1To2);
+            currentForce = add3DVector(currentForce,forceTowardsN2);
+
           }
           //always repel
-
+          let repulsionMaginitude = this.c3/Math.pow(distance,2);
+          let forceAwayN2 =  scalarTimes3DVector(repulsionMaginitude,vec2To1);
+          currentForce = add3DVector(currentForce,forceAwayN2);
+          forceOnNode = add3DVector(currentForce,forceOnNode);
+          
         }
       }
+      //for node1 all forces calculated
+      let obj = {nodeName: key1, forceOnNode: forceOnNode}
+      forcesArray.push(obj)
+    }
+    //forces for all nodes calculated
+    //now to move all nodes by the correct force times c4
+    for (let value of forcesArray) {
+      let name = value.nodeName;
+      let force = value.forceOnNode;
+      let motion = scalarTimes3DVector(this.c4,force);
+      graph.applyMotionVectorToNode(name,motion);
     }
   }  
 }
@@ -128,10 +127,50 @@ function sub3DVector(vector1, vector2){
  * @param {number} vector.y
  * @param {number} vector.z 
  */
-function length3dVector(vector) {
+function length3DVector(vector) {
   let squaredSum = Math.pow(vector.x,2) + Math.pow(vector.y,2) + Math.pow(vector.z,2);
   return Math.sqrt(squaredSum);
 }
-
-
+/**
+ * Normalises the input 3D vector
+ * @param {object} vector
+ * @param {number} vector.x
+ * @param {number} vector.y
+ * @param {number} vector.z 
+ */
+function normalise3DVector(vector){
+  let length = length3DVector(vector);
+  vector.x = vector.x/length;
+  vector.y = vector.y/length;
+  vector.z = vector.z/length;
+}
+/**
+ * Returns the product of a scalar and a vector
+ * @param {object} vector
+ * @param {number} vector.x
+ * @param {number} vector.y
+ * @param {number} vector.z 
+ * @param {number} scalar
+ */
+function scalarTimes3DVector(scalar, vector){
+  return {x: scalar*vector.x, y: scalar*vector.y, z: scalar*vector.z}
+}
 let myGraph = new network.networkGraph();
+let myEades = new eadesForceSimulator(2,1,1,0.1);
+
+myGraph.addNode("Node1",{x: 0, y: 0, z: 0},{});
+myGraph.addNode("Node2",{x: 1, y: 0, z: 0},{});
+//myGraph.addNode("Node3",{x: -1, y: 0, z: 0},{});
+//myGraph.addNode("Node4",{x: 0, y: 1, z: 0},{});
+
+myGraph.addLink("Node1","Node2");
+////myGraph.addLink("Node1","Node3");
+//myGraph.addLink("Node1","Node4");
+
+myGraph.print();
+
+var i = 0; var loops = 2000;
+for (i;i<loops;i++){
+  myEades.simulatorStep(myGraph);
+}
+myGraph.print();
