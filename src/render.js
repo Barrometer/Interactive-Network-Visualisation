@@ -3,7 +3,8 @@
  * Right now it's just some proofs of concept
  */
 import * as THREE from 'three';
-var network = require("./network")
+var network = require("./network");
+var eades = require("./forcedirected");
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -27,6 +28,14 @@ myGraph.addLink("NodeA","NodeB");
 myGraph.addLink("NodeC","NodeB");
 myGraph.addLink("NodeD","NodeB");
 myGraph.addLink("NodeE","NodeB");
+myGraph.print();
+
+var myEades = new eades.eadesForceSimulator(2,3,1,0.1);
+var i =0; var loops = 200;
+for(i;i<loops;i++){
+  myEades.simulatorStep(myGraph);
+}
+
 myGraph.print();
 var lineMaterial = new THREE.LineBasicMaterial( { color: 0x0000ff } );
 //controls = new THREE.OrbitControls(camera,renderer.domElement)

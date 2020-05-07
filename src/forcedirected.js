@@ -10,7 +10,7 @@ var network = require("./network");
  * Repulsive force between all nodes, = c3/d**2
  * Moves nodes c4*total force on node
  */
-class eadesForceSimulator{
+exports.eadesForceSimulator = class{
   /**
    * 
    * @param {Number} c1 
@@ -156,22 +156,3 @@ function normalise3DVector(vector){
 function scalarTimes3DVector(scalar, vector){
   return {x: scalar*vector.x, y: scalar*vector.y, z: scalar*vector.z}
 }
-let myGraph = new network.networkGraph();
-let myEades = new eadesForceSimulator(2,1,1,0.1);
-
-myGraph.addNode("Node1",{x: 0, y: 0, z: 0},{});
-myGraph.addNode("Node2",{x: 1, y: 0, z: 0},{});
-myGraph.addNode("Node3",{x: -1, y: 0, z: 0},{});
-myGraph.addNode("Node4",{x: 0, y: 1, z: 0},{});
-
-myGraph.addLink("Node1","Node2");
-myGraph.addLink("Node1","Node3");
-myGraph.addLink("Node1","Node4");
-
-myGraph.print();
-
-var i = 0; var loops = 100;
-for (i;i<loops;i++){
-  myEades.simulatorStep(myGraph);
-}
-myGraph.print();
