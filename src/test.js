@@ -10,19 +10,5 @@ myGraph.addLink("NodeA","NodeB");
 myGraph.addLink("NodeE","NodeB");
 myGraph.print();
 
-var graphAsJSON = JSON.stringify(myGraph);
-console.log(graphAsJSON);
-
-var secondGraph = new network.networkGraph();
-secondGraph.load(graphAsJSON);
-console.log("\n\n");
-secondGraph.print();
-
-var secondGraphAsJSON = JSON.stringify(secondGraph);
-
-if(secondGraphAsJSON == graphAsJSON) {
-  console.log("Yep");
-}
-else {
-  console.log("nope");
-}
+console.log(myGraph.findLinksWithNodeIn("NodeB"));
+console.log(myGraph.findNodesLinkedToNode("NodeB"));

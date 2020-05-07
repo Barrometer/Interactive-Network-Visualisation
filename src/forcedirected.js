@@ -41,6 +41,7 @@ class eadesForceSimulator{
       let forceOnNode = {x: 0, y:0, z: 0};
       let node1Position = node1.coords;
       let nodesConnectedtoNode1 = graph.findNodesLinkedToNode(key1);
+      //console.log(nodesConnectedtoNode1);
       for (let [key2,node2] of graph.nodes) {
         if(key1 != key2) { //this should prevent calculating the force of a node on itself
           let node2Position = node2.coords;
@@ -160,16 +161,16 @@ let myEades = new eadesForceSimulator(2,1,1,0.1);
 
 myGraph.addNode("Node1",{x: 0, y: 0, z: 0},{});
 myGraph.addNode("Node2",{x: 1, y: 0, z: 0},{});
-//myGraph.addNode("Node3",{x: -1, y: 0, z: 0},{});
-//myGraph.addNode("Node4",{x: 0, y: 1, z: 0},{});
+myGraph.addNode("Node3",{x: -1, y: 0, z: 0},{});
+myGraph.addNode("Node4",{x: 0, y: 1, z: 0},{});
 
 myGraph.addLink("Node1","Node2");
-////myGraph.addLink("Node1","Node3");
-//myGraph.addLink("Node1","Node4");
+myGraph.addLink("Node1","Node3");
+myGraph.addLink("Node1","Node4");
 
 myGraph.print();
 
-var i = 0; var loops = 2000;
+var i = 0; var loops = 100;
 for (i;i<loops;i++){
   myEades.simulatorStep(myGraph);
 }

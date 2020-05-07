@@ -120,7 +120,8 @@ exports.networkGraph = class {
    * @param {string} nodeName 
    */
   findNodesLinkedToNode(nodeName) {
-    let linksWithNodeIn = this.findLinksWithNodeIn();
+    let linksWithNodeIn = this.findLinksWithNodeIn(nodeName);
+    
     let linkedNodes = [];
     for (const linkName of linksWithNodeIn) {
       let link = this.links.get(linkName);
