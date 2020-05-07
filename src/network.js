@@ -116,6 +116,27 @@ exports.networkGraph = class {
     return linksWithNodeIn;
   }
   /**
+   * Returns an array containing all other nodes a node is linked to
+   * @param {string} nodeName 
+   */
+  findNodesLinkedToNode(nodeName) {
+    let linksWithNodeIn = this.findLinksWithNodeIn();
+    let linkedNodes = [];
+    for (const linkName of linksWithNodeIn) {
+      let link = this.links.get(linkName);
+      if (link.from != nodeName) {
+        //ie the link is to nodeName
+        linkedNodes.push(link.from);
+      }
+      else if (link.to != nodeName) {
+        linkedNodes.push(link.to);
+      } 
+      else {
+        
+      }
+    }
+  }
+  /**
    * If a node exists in the network, sets it's coords to the specified values
    * Does not update
    * @param {string} nodeName 
