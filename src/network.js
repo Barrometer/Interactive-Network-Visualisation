@@ -116,7 +116,7 @@ exports.networkGraph = class {
     return linksWithNodeIn;
   }
   /**
-   * Returns an array containing all other nodes a node is linked to
+   * Returns an array containing all the nodes a node is linked to
    * @param {string} nodeName 
    */
   findNodesLinkedToNode(nodeName) {
@@ -126,15 +126,19 @@ exports.networkGraph = class {
       let link = this.links.get(linkName);
       if (link.from != nodeName) {
         //ie the link is to nodeName
-        linkedNodes.push(link.from);
+        let theLinkedNode = this.nodes.get(link.from)
+        linkedNodes.push(theLinkedNode);
       }
       else if (link.to != nodeName) {
-        linkedNodes.push(link.to);
+        //ie the link is from nodeName
+        let theLinkedNode = this.nodes.get(link.to)
+        linkedNodes.push(theLinkedNode);
       } 
       else {
-        
+        console.log("Something has gone wrong with findNodesLinkedToNode");
       }
     }
+    return linkedNodes;
   }
   /**
    * If a node exists in the network, sets it's coords to the specified values
@@ -149,6 +153,22 @@ exports.networkGraph = class {
     if(this.nodes.has(nodeName)) {
       let nodeToUpdate = this.nodes.get(nodeName);
       nodeToUpdate.coords = newNodeCoords;
+    }
+  }
+  /**
+   * 
+   * @param {string} nodeName 
+   * @param {object} motionVector
+   * @param {number} motionVector.x
+   * @param {number} motionVector.y
+   * @param {number} motionVector.z 
+   */
+  applyMotionVectorToNode(nodeName,motionVector) {
+    if(this.nodes.has(nodeName)) {
+      let node = this.nodes.get(nodeName);
+      let nodeCoords = node.coords;
+      let newNodeCoords = addCoords(nodeCoords,motionVector);
+      node.coords = newNodeCoords;
     }
   }
 /**
@@ -245,4 +265,22 @@ function strMapToObj(strMap){
     obj[key] = value;
   }
   return obj;
+}
+/**
+ * 
+ * @param {object} coord1
+ * @param {number} coord1.x
+ * @param {number} coord1.y
+ * @param {number} coord1.z 
+ * @param {object} coord2
+ * @param {number} coord2.x
+ * @param {number} coord2.y
+ * @param {number} coord2.z 
+ */
+function addCoords(coord1,coord2){
+  let newX = coord1.x + coord2.x
+  let newY = coord1.y + coord2.y
+  let newZ = coord1.z + coord2.z
+
+  return {x: newX, y: newY, z: newZ};
 }
