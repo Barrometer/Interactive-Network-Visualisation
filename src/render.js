@@ -28,9 +28,12 @@ myGraph.addLink("NodeA","NodeB");
 myGraph.addLink("NodeC","NodeB");
 myGraph.addLink("NodeD","NodeB");
 myGraph.addLink("NodeE","NodeB");
+myGraph.addLink("NodeA","NodeF");
+myGraph.addLink("NodeF","NodeB");
+myGraph.randomiseNodeLocations();
 myGraph.print();
 
-var myEades = new eades.eadesForceSimulator(2,3,1,0.1);
+var myEades = new eades.eadesForceSimulator(2,3,3,0.1);
 var i =0; var loops = 200;
 for(i;i<loops;i++){
   myEades.simulatorStep(myGraph);

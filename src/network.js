@@ -255,6 +255,25 @@ exports.networkGraph = class {
       this.addLink(linkToAdd.from,linkToAdd.to);
     }
   }
+  randomiseNodeLocations(){
+    let numberOfNodes = this.nodes.size;
+    //basic strategy as follows: randomly position nodes in a square of radius n
+    //where n is the number of nodes
+    for(let value of this.nodes.values()){
+      let randX = Math.random() * (numberOfNodes*2)-numberOfNodes;
+      let randY = Math.random() * (numberOfNodes*2)-numberOfNodes;
+      let randZ = Math.random() * (numberOfNodes*2)-numberOfNodes;
+      let newCoords = {x: randX, y: randY, z: randZ};
+      value.coords = newCoords;
+    }
+  }
+  /**
+   * resets the graph
+   */
+  deleteNetwork(){
+    this.nodes.clear();
+    this.links.clear();
+  }
 };
 /**
  * Function to convert Map with string key to an object
