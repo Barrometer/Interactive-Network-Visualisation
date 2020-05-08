@@ -2,6 +2,15 @@
  * This file provides the backing network model for the entire simulation
  */
 
+/**
+ * @typedef coordinates
+ * @type {object}
+ * @property {number} x x coordinate
+ * @property {number} y y coordinate
+ * @property {number} z z coordinate
+ */
+
+
 class networkNode {
   /**
   *
@@ -157,7 +166,7 @@ exports.networkGraph = class {
     }
   }
   /**
-   * 
+   * Translates a nodes coordiantes by a motion vector
    * @param {string} nodeName 
    * @param {object} motionVector
    * @param {number} motionVector.x
@@ -198,7 +207,7 @@ exports.networkGraph = class {
       }
   }
   /**
-   * Returns an array of objs consisting of all the nodes names and strings
+   * Returns an array of objs consisting of all the nodes names and coords
    */
   getNodeNamesAndCoords() {
     let result = [];
@@ -273,6 +282,23 @@ exports.networkGraph = class {
   deleteNetwork(){
     this.nodes.clear();
     this.links.clear();
+  }
+  /**
+   * Applies a large number of updates to the graph
+   * @param {Array.<{nodeName: string, coords: coordinates, data: *}>} updates 
+   */
+  bulkNodeUpdate(updates) {
+    for (let update of updates) {
+      if (this.nodes.has(update.nodeName)) {
+        //do the update
+        if(update.hasOwnPropery("coords")){
+          this.updateNodeCoords(update.nodeName,update.coords)
+        }
+        if(update.hasOwnPropery("data")){
+          this.updateNodeData(update.nodeName,update.data);
+        }
+      }
+    }
   }
 };
 /**
