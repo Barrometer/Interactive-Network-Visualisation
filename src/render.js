@@ -5,7 +5,20 @@
 import * as THREE from 'three';
 var network = require("./network");
 var eades = require("./forcedirected");
+var graphgenerator = require("./graphgenerator");
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+var raycaster = new THREE.Raycaster();
+var mouse =  new THREE.Vector2();
+
+function onMouseMove( event ) {
+
+	// calculate mouse position in normalized device coordinates
+	// (-1 to +1) for both components
+
+	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+}
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
@@ -18,21 +31,9 @@ var controls = new OrbitControls( camera, renderer.domElement );
 controls.update();
 
 
-var myGraph = new network.networkGraph();
-myGraph.addNode("NodeA",{x: 15, y: 5, z: 0},{});
-myGraph.addNode("NodeB",{x: 10, y: 5, z: 0},{});
-myGraph.addNode("NodeC",{x: 10, y: 10, z: 5},{});
-myGraph.addNode("NodeD",{x: 10, y: 15, z: 0},{});
-myGraph.addNode("NodeE",{x: 5, y: 5, z: 0},{});
-myGraph.addLink("NodeA","NodeB");
-myGraph.addLink("NodeC","NodeB");
-myGraph.addLink("NodeD","NodeB");
-myGraph.addLink("NodeE","NodeB");
-myGraph.addLink("NodeA","NodeF");
-myGraph.addLink("NodeF","NodeB");
-myGraph.randomiseNodeLocations();
-myGraph.print();
-
+var myGenerator = new graphgenerator.dagGenerator(50,1.2);
+myGenerator.randomise();
+var myGraph =  myGenerator.graph;
 var myEades = new eades.eadesForceSimulator(2,3,3,0.1);
 var i =0; var loops = 200;
 for(i;i<loops;i++){
