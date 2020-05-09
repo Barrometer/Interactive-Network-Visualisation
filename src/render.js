@@ -9,7 +9,9 @@ var graphgenerator = require("./graphgenerator");
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 var raycaster = new THREE.Raycaster();
 var mouse =  new THREE.Vector2();
+var dat = require("dat.gui");
 
+var gui = new dat.GUI()
 function onMouseMove( event ) {
 
 	// calculate mouse position in normalized device coordinates
