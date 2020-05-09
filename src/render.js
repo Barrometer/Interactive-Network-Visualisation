@@ -29,7 +29,7 @@ camera.position.set( 0, 0, 100 );
 camera.lookAt( 0, 0, 0 );
 var controls = new OrbitControls( camera, renderer.domElement );
 controls.update();
-
+document.addEventListener('mousemove',onMouseMove,false);
 
 var myGenerator = new graphgenerator.dagGenerator(50,1.2);
 myGenerator.randomise();
@@ -56,6 +56,7 @@ function coordsToRenderedNodes(nameAndCoord) {
   cube.position.x =  nameAndCoord.coords.x;
   cube.position.y =  nameAndCoord.coords.y;
   cube.position.z =  nameAndCoord.coords.z;
+  cube.name = nameAndCoord.name;
   scene.add(cube);
 }
 function coordsToRenderedArrows(nameAndCoords) {
@@ -68,6 +69,7 @@ function coordsToRenderedArrows(nameAndCoords) {
   dir.normalize();
   var origin =  new THREE.Vector3(from.x, from.y, from.z);
   var arrow =  new THREE.ArrowHelper(dir,origin,length,0x0000ff);
+  arrow.name = nameAndCoords.name;
   scene.add(arrow);
 }
 nodeNamesAndCoords.forEach(coordsToRenderedNodes);
@@ -78,6 +80,13 @@ function animate() {
 
 	// required if controls.enableDamping or controls.autoRotate are set to true
 	controls.update();
+
+  raycaster.setFromCamera(mouse,camera);
+  var intersects = raycaster.intersectObjects(scene.children)
+  if(intersects.length > 0){
+    //only care for first
+    console.log("Intersection with object named " + intersects[0].object.name);
+  }
 
 	renderer.render( scene, camera );
 
