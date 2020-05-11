@@ -2,6 +2,14 @@
  * This will eventually become the front end rendering.
  * Right now it's just some proofs of concept
  */
+
+/**
+ * @typedef {object} Coords
+ * @property {number} x
+ * @property {number} y
+ * @property {number} z
+ */
+
 import * as THREE from 'three';
 var network = require("./network");
 var eades = require("./forcedirected");
@@ -9,14 +17,14 @@ var graphgenerator = require("./graphgenerator");
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 var dat = require("dat.gui");
 
-var c1=2,c2=3,c3=3,c4=0.1;
+//INIT
 var numIterations = 30;
-var myGraph = new network.networkGraph();
 var myGenerator = new graphgenerator.dagGenerator(50,1.2);
 myGenerator.randomise();
-var myEades =  new eades.eadesForceSimulator(c1,c2,c3,c4);
-var container;
-var camera,scene,raycaster,renderer,controls;
+var myGraph = myGenerator.graph;
+//var camera,scene,raycaster,renderer,controls;
+var meshMaterial = new THREE.MeshBasicMaterial({color:0xffff0});
+var meshGeometry = new THREE.BoxBufferGeometry(1,1,1);
 var mouse = new THREE.Vector2();
 var params = {
   c1: 2,
@@ -25,6 +33,8 @@ var params = {
   c4: 4,
   iterations: 30
 }
+var myEades =  new eades.eadesForceSimulator(params.c1, params.c2, params.c3, params.c4);
+
 var myGui = new dat.GUI();
 
 var c1Controller = myGui.add(params,"c1");
@@ -33,26 +43,71 @@ var c3Controller = myGui.add(params,"c3");
 var c4Controller = myGui.add(params,"c4");
 var iterController = myGui.add(params,"iterations");
 
+c1Controller.onFinishChange(function(value){
+  myEades.c1 = value;
+});
+
+c2Controller.onFinishChange(function(value){
+  myEades.c2 = value;
+});
+
+c3Controller.onFinishChange(function(value){
+  myEades.c3 = value;
+});
+
+c4Controller.onFinishChange(function(value){
+  myEades.c4 = value;
+});
+
+var nodeNamesAndCoords = myGraph.getNodeNamesAndCoords();
+var lineNamesAndCoords = myGraph.getLineNamesAndCoords();
+
+/**
+ * @type {Array.<THREE.Mesh>}
+ */
 var nodeArray = [];
+/**
+ * @type {Array.<THREE.ArrowHelper>}
+ */
 var lineArray = [];
 
-init();
+var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight,1,500);
+var scene = new THREE.Scene();
+var raycaster = new THREE.Raycaster();
+
+var renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+container.appendChild(renderer.domElement);
+var controls = new OrbitControls(camera,renderer.domElement);
+controls.update();
+document.addEventListener("mousemove",onMouseMove,false);
+
+//want to create objects for all nodes / lines
+nodeNamesAndCoords.forEach(function(value){
+  var cube = new THREE.Mesh(meshGeometry,meshMaterial);
+  cube.position.x = value.coords.x;
+  cube.position.y = value.coords.y;
+  cube.position.z = value.coords.z;
+  cube.name = value.name;
+  nodeArray.push(cube);
+  scene.add(cube);
+});
+lineNamesAndCoords.forEach(function(value){
+  var from = value.coordsFrom;
+  var to = value.coordsTo;
+  //console.log(to.x-from.x)
+  var dir = new THREE.Vector3(to.x - from.x, to.y - from.y, to.z -  from.z);
+  var length = dir.length();
+  dir.normalize();
+  var origin =  new THREE.Vector3(from.x, from.y, from.z);
+  var arrow =  new THREE.ArrowHelper(dir,origin,length,0x0000ff);
+  arrow.name = value.name;
+  lineArray.push(arrow);
+  scene.add(arrow);
+});
+
 animate();
-
-function init(){
-  container = document.createElement("div");
-  document.body.appendChild(container);
-  camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight,1,500);
-  scene = new THREE.Scene();
-  raycaster = new THREE.Raycaster();
-
-  renderer = new THREE.WebGLRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  container.appendChild(renderer.domElement);
-  controls = new OrbitControls(camera,renderer.domElement);
-  controls.update();
-  document.addEventListener("mousemove",onMouseMove,false);
-}
+//function definitions
 
 function onMouseMove( event ) {
 
@@ -63,9 +118,14 @@ function onMouseMove( event ) {
 	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
 }
-
 function animate(){
   requestAnimationFrame(animate);
   controls.update();
   raycaster.setFromCamera(mouse,camera);
+  /*var intersects = raycaster.intersectObjects(scene.children);
+  if (IntersectionObserver.length > 0) {
+    console.log("Intersection with object named " + intersects[0].object.name);
+  }*/
+  renderer.render(scene,camera)
 }
+
