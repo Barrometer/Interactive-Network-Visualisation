@@ -300,6 +300,18 @@ exports.networkGraph = class {
       }
     }
   }
+  /**
+   * 
+   * @param {string} nodeName 
+   */
+  getNodeCoord(nodeName){
+    if(this.nodes.has(nodeName)) {
+      return this.nodes.get(nodeName).coords;
+    }
+    else {
+      return null;
+    }
+  }
 };
 /**
  * Function to convert Map with string key to an object

@@ -18,11 +18,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 var dat = require("dat.gui");
 
 //INIT
+
+
 var numIterations = 30;
 var myGenerator = new graphgenerator.dagGenerator(50,1.2);
 myGenerator.randomise();
 var myGraph = myGenerator.graph;
-//var camera,scene,raycaster,renderer,controls;
+
 var meshMaterial = new THREE.MeshBasicMaterial({color:0xffff0});
 var meshGeometry = new THREE.BoxBufferGeometry(1,1,1);
 var mouse = new THREE.Vector2();
@@ -34,7 +36,7 @@ var params = {
   iterations: 30
 }
 var myEades =  new eades.eadesForceSimulator(params.c1, params.c2, params.c3, params.c4);
-
+var loopCount = 0;
 var myGui = new dat.GUI();
 
 var c1Controller = myGui.add(params,"c1");
@@ -45,18 +47,22 @@ var iterController = myGui.add(params,"iterations");
 
 c1Controller.onFinishChange(function(value){
   myEades.c1 = value;
+  loopCount = 0;
 });
 
 c2Controller.onFinishChange(function(value){
   myEades.c2 = value;
+  loopCount = 0;
 });
 
 c3Controller.onFinishChange(function(value){
   myEades.c3 = value;
+  loopCount = 0;
 });
 
 c4Controller.onFinishChange(function(value){
   myEades.c4 = value;
+  loopCount = 0;
 });
 
 var nodeNamesAndCoords = myGraph.getNodeNamesAndCoords();
@@ -72,12 +78,14 @@ var nodeArray = [];
 var lineArray = [];
 
 var camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight,1,500);
+camera.position.set( 0, 0, 100 );
+camera.lookAt( 0, 0, 0 );
 var scene = new THREE.Scene();
 var raycaster = new THREE.Raycaster();
 
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
-container.appendChild(renderer.domElement);
+document.body.appendChild(renderer.domElement);
 var controls = new OrbitControls(camera,renderer.domElement);
 controls.update();
 document.addEventListener("mousemove",onMouseMove,false);
@@ -122,10 +130,27 @@ function animate(){
   requestAnimationFrame(animate);
   controls.update();
   raycaster.setFromCamera(mouse,camera);
-  /*var intersects = raycaster.intersectObjects(scene.children);
-  if (IntersectionObserver.length > 0) {
+  var intersects = raycaster.intersectObjects(scene.children);
+  if (intersects.length > 0) {
     console.log("Intersection with object named " + intersects[0].object.name);
-  }*/
+  }
+  if(loopCount<params.iterations) {
+    loopCount++;
+    myEades.simulatorStep(myGraph);
+    //now to update node positions
+    nodeArray.forEach(function(renderedNode){
+      let nodeName = renderedNode.name;
+      let nodeCoords = myGraph.getNodeCoord(nodeName);
+      
+      renderedNode.position.x = nodeCoords.x;
+      renderedNode.position.y = nodeCoords.y;
+      renderedNode.position.z = nodeCoords.z;
+      
+    });
+    lineArray.forEach(function(renderedLine){
+
+    });
+  }
+
   renderer.render(scene,camera)
 }
-
