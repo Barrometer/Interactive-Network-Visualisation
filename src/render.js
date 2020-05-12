@@ -33,7 +33,7 @@ var params = {
   c2: 3,
   c3: 3,
   c4: 4,
-  iterations: 30
+  iterations: 0
 }
 var myEades =  new eades.eadesForceSimulator(params.c1, params.c2, params.c3, params.c4);
 var loopCount = 0;
@@ -108,7 +108,7 @@ lineNamesAndCoords.forEach(function(value){
   var length = dir.length();
   dir.normalize();
   var origin =  new THREE.Vector3(from.x, from.y, from.z);
-  var arrow =  new THREE.ArrowHelper(dir,origin,length,0x0000ff);
+  var arrow =  new THREE.ArrowHelper(dir,origin,length,0x0000ff,0.2,0.2);
   arrow.name = value.name;
   lineArray.push(arrow);
   scene.add(arrow);
@@ -148,7 +148,20 @@ function animate(){
       
     });
     lineArray.forEach(function(renderedLine){
-
+      let lineName = renderedLine.name;
+      let lineCoords = myGraph.getLineCoords(lineName);
+      
+      let from = lineCoords.from;
+      let to = lineCoords.to;
+      let dir = new THREE.Vector3(to.x - from.x, to.y - from.y, to.z -  from.z);
+      let length = dir.length();
+      dir.normalize;
+      console.log(dir.x +" "+dir.y+ " "+dir.z);
+      renderedLine.setDirection(dir);
+      renderedLine.setLength(length);
+      let origin =  new THREE.Vector3(from.x,from.y,from.z);
+      renderedLine.position.copy(origin);
+      
     });
   }
 

@@ -301,12 +301,24 @@ exports.networkGraph = class {
     }
   }
   /**
-   * 
+   * Gets the coordinates of a node from its name. Returns null if node does not exist
    * @param {string} nodeName 
    */
   getNodeCoord(nodeName){
     if(this.nodes.has(nodeName)) {
       return this.nodes.get(nodeName).coords;
+    }
+    else {
+      return null;
+    }
+  }
+
+  getLineCoords(lineName) {
+    if(this.links.has(lineName)){
+      let line = this.links.get(lineName);
+      let to = this.nodes.get(line.to).coords;
+      let from = this.nodes.get(line.from).coords;
+      return {from: from, to: to};
     }
     else {
       return null;
