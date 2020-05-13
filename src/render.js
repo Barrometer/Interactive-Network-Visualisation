@@ -32,8 +32,8 @@ var params = {
   c1: 2,
   c2: 3,
   c3: 3,
-  c4: 4,
-  iterations: 0
+  c4: 0.1,
+  iterations: 100
 }
 var myEades =  new eades.eadesForceSimulator(params.c1, params.c2, params.c3, params.c4);
 var loopCount = 0;
@@ -47,22 +47,22 @@ var iterController = myGui.add(params,"iterations");
 
 c1Controller.onFinishChange(function(value){
   myEades.c1 = value;
-  loopCount = 0;
+  
 });
 
 c2Controller.onFinishChange(function(value){
   myEades.c2 = value;
-  loopCount = 0;
+  
 });
 
 c3Controller.onFinishChange(function(value){
   myEades.c3 = value;
-  loopCount = 0;
+  
 });
 
 c4Controller.onFinishChange(function(value){
   myEades.c4 = value;
-  loopCount = 0;
+  
 });
 
 var nodeNamesAndCoords = myGraph.getNodeNamesAndCoords();
@@ -108,7 +108,7 @@ lineNamesAndCoords.forEach(function(value){
   var length = dir.length();
   dir.normalize();
   var origin =  new THREE.Vector3(from.x, from.y, from.z);
-  var arrow =  new THREE.ArrowHelper(dir,origin,length,0x0000ff,0.2,0.2);
+  var arrow =  new THREE.ArrowHelper(dir,origin,length,0x0000ff,1,1);
   arrow.name = value.name;
   lineArray.push(arrow);
   scene.add(arrow);
@@ -155,12 +155,12 @@ function animate(){
       let to = lineCoords.to;
       let dir = new THREE.Vector3(to.x - from.x, to.y - from.y, to.z -  from.z);
       let length = dir.length();
-      dir.normalize;
-      console.log(dir.x +" "+dir.y+ " "+dir.z);
-      renderedLine.setDirection(dir);
-      renderedLine.setLength(length);
+      dir.normalize();
       let origin =  new THREE.Vector3(from.x,from.y,from.z);
       renderedLine.position.copy(origin);
+      renderedLine.setDirection(dir);
+      renderedLine.setLength(length,1,1);
+      
       
     });
   }
