@@ -19,7 +19,7 @@ var dat = require("dat.gui");
 
 //INIT
 
-
+var INTERSECTED;
 var numIterations = 30;
 var myGenerator = new graphgenerator.dagGenerator(50,1.2);
 myGenerator.randomise();
@@ -132,7 +132,11 @@ function animate(){
   raycaster.setFromCamera(mouse,camera);
   var intersects = raycaster.intersectObjects(scene.children);
   if (intersects.length > 0) {
-    console.log("Intersection with object named " + intersects[0].object.name);
+    if(intersects[0].object!=INTERSECTED){
+      INTERSECTED = intersects[0].object;
+      let nodeName = intersects[0].object.name
+      myGraph.nodes.get(nodeName).print();
+    }
   }
   if(loopCount<params.iterations) {
     loopCount++;
