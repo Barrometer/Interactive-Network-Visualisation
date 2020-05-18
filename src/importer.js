@@ -1,20 +1,29 @@
 /**
  * Code for importing some .graphml networks
  * Takes as command line argument path to .graphml file, and name of json to write to
+ * Usage:   Input 1: path to graphml
+ *          Input 2: path to output
  */
 
-/*
-Graphml is basically just xml
-
-*/
 
 var convert =  require("xml-js");
 var fs = require("fs");
 var network = require("./network");
 
+var myArgs = process.argv.slice(2);
+console.log('myArgs: ', myArgs);
+
+if(myArgs.length<2){
+  console.log("Not enough arguments");
+  process.exit(1);
+}
+
+let sourcePath = myArgs[0];
+let destPath = myArgs[1];
+
 let myGraph = new network.networkGraph();
 try{
-  var graphmlData = fs.readFileSync("greek_gods_antichains.graphml")
+  var graphmlData = fs.readFileSync(sourcePath)
   var graphmlAsJSON =  convert.xml2json(graphmlData,{compact: true, spaces: 4});
   //console.log(graphmlAsJSON);
 
@@ -34,4 +43,5 @@ try{
 }
 let jsonGraph =  JSON.stringify(myGraph);
 
-fs.writeFileSync("newTest.json",jsonGraph);
+fs.writeFileSync(destPath,jsonGraph);
+

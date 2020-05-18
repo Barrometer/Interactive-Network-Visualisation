@@ -1,0 +1,1084 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key attr.name="node_partition_based_both_resolution_2" attr.type="long" for="node" id="d13"/>
+<key attr.name="node_partition_based_successors_resolution_2" attr.type="long" for="node" id="d12"/>
+<key attr.name="node_partition_based_predecessors_resolution_2" attr.type="long" for="node" id="d11"/>
+<key attr.name="node_partition_based_both_resolution_1.5" attr.type="long" for="node" id="d10"/>
+<key attr.name="node_partition_based_successors_resolution_1.5" attr.type="long" for="node" id="d9"/>
+<key attr.name="node_partition_based_predecessors_resolution_1.5" attr.type="long" for="node" id="d8"/>
+<key attr.name="node_partition_based_both_resolution_1" attr.type="long" for="node" id="d7"/>
+<key attr.name="node_partition_based_successors_resolution_1" attr.type="long" for="node" id="d6"/>
+<key attr.name="node_partition_based_predecessors_resolution_1" attr.type="long" for="node" id="d5"/>
+<key attr.name="names" attr.type="string" for="node" id="d4"/>
+<key attr.name="node_partition_based_both_resolution_0.5" attr.type="long" for="node" id="d3"/>
+<key attr.name="node_partition_based_successors_resolution_0.5" attr.type="long" for="node" id="d2"/>
+<key attr.name="node_partition_based_predecessors_resolution_0.5" attr.type="long" for="node" id="d1"/>
+<key attr.name="heights_from_chaos" attr.type="double" for="node" id="d0"/>
+<graph edgedefault="directed"><node id="Chaos">
+  <data key="d0">0.0</data>
+  <data key="d1">1000</data>
+  <data key="d2">1000</data>
+  <data key="d3">1000</data>
+  <data key="d4">Chaos</data>
+  <data key="d5">1000</data>
+  <data key="d6">1000</data>
+  <data key="d7">1000</data>
+  <data key="d8">1000</data>
+  <data key="d9">1000</data>
+  <data key="d10">1000</data>
+  <data key="d11">1000</data>
+  <data key="d12">1000</data>
+  <data key="d13">1000</data>
+</node>
+<node id="Tartarus">
+  <data key="d0">1.0</data>
+  <data key="d1">1</data>
+  <data key="d2">1</data>
+  <data key="d3">1</data>
+  <data key="d4">Tartarus</data>
+  <data key="d5">1</data>
+  <data key="d6">1</data>
+  <data key="d7">1</data>
+  <data key="d8">1</data>
+  <data key="d9">1</data>
+  <data key="d10">1</data>
+  <data key="d11">2</data>
+  <data key="d12">1</data>
+  <data key="d13">1</data>
+</node>
+<node id="Gaia">
+  <data key="d0">1.0</data>
+  <data key="d1">1</data>
+  <data key="d2">1</data>
+  <data key="d3">1</data>
+  <data key="d4">Gaia</data>
+  <data key="d5">1</data>
+  <data key="d6">1</data>
+  <data key="d7">1</data>
+  <data key="d8">1</data>
+  <data key="d9">1</data>
+  <data key="d10">1</data>
+  <data key="d11">2</data>
+  <data key="d12">1</data>
+  <data key="d13">1</data>
+</node>
+<node id="Eros">
+  <data key="d0">1.0</data>
+  <data key="d1">1</data>
+  <data key="d2">1000</data>
+  <data key="d3">1</data>
+  <data key="d4">Eros</data>
+  <data key="d5">1</data>
+  <data key="d6">1000</data>
+  <data key="d7">1</data>
+  <data key="d8">1</data>
+  <data key="d9">1000</data>
+  <data key="d10">1</data>
+  <data key="d11">2</data>
+  <data key="d12">1000</data>
+  <data key="d13">1</data>
+</node>
+<node id="Erebus">
+  <data key="d0">1.0</data>
+  <data key="d1">1</data>
+  <data key="d2">3</data>
+  <data key="d3">1</data>
+  <data key="d4">Erebus</data>
+  <data key="d5">1</data>
+  <data key="d6">3</data>
+  <data key="d7">1</data>
+  <data key="d8">1</data>
+  <data key="d9">3</data>
+  <data key="d10">1</data>
+  <data key="d11">2</data>
+  <data key="d12">3</data>
+  <data key="d13">1</data>
+</node>
+<node id="Nyx">
+  <data key="d0">1.0</data>
+  <data key="d1">1</data>
+  <data key="d2">3</data>
+  <data key="d3">1</data>
+  <data key="d4">Nyx</data>
+  <data key="d5">1</data>
+  <data key="d6">3</data>
+  <data key="d7">1</data>
+  <data key="d8">1</data>
+  <data key="d9">3</data>
+  <data key="d10">1</data>
+  <data key="d11">2</data>
+  <data key="d12">3</data>
+  <data key="d13">1</data>
+</node>
+<node id="Typhon">
+  <data key="d0">2.0</data>
+  <data key="d1">4</data>
+  <data key="d2">1000</data>
+  <data key="d3">4</data>
+  <data key="d4">Typhon</data>
+  <data key="d5">4</data>
+  <data key="d6">1000</data>
+  <data key="d7">4</data>
+  <data key="d8">3</data>
+  <data key="d9">1000</data>
+  <data key="d10">3</data>
+  <data key="d11">8</data>
+  <data key="d12">1000</data>
+  <data key="d13">4</data>
+</node>
+<node id="Uranus">
+  <data key="d0">2.0</data>
+  <data key="d1">3</data>
+  <data key="d2">1000</data>
+  <data key="d3">3</data>
+  <data key="d4">Uranus</data>
+  <data key="d5">3</data>
+  <data key="d6">1000</data>
+  <data key="d7">3</data>
+  <data key="d8">3</data>
+  <data key="d9">1000</data>
+  <data key="d10">3</data>
+  <data key="d11">8</data>
+  <data key="d12">1000</data>
+  <data key="d13">1000</data>
+</node>
+<node id="Ourea">
+  <data key="d0">2.0</data>
+  <data key="d1">4</data>
+  <data key="d2">1000</data>
+  <data key="d3">4</data>
+  <data key="d4">Ourea</data>
+  <data key="d5">4</data>
+  <data key="d6">1000</data>
+  <data key="d7">4</data>
+  <data key="d8">3</data>
+  <data key="d9">1000</data>
+  <data key="d10">3</data>
+  <data key="d11">8</data>
+  <data key="d12">1000</data>
+  <data key="d13">4</data>
+</node>
+<node id="Pontus">
+  <data key="d0">2.0</data>
+  <data key="d1">4</data>
+  <data key="d2">1000</data>
+  <data key="d3">4</data>
+  <data key="d4">Pontus</data>
+  <data key="d5">4</data>
+  <data key="d6">1000</data>
+  <data key="d7">4</data>
+  <data key="d8">3</data>
+  <data key="d9">1000</data>
+  <data key="d10">3</data>
+  <data key="d11">8</data>
+  <data key="d12">1000</data>
+  <data key="d13">4</data>
+</node>
+<node id="Aether">
+  <data key="d0">2.0</data>
+  <data key="d1">3</data>
+  <data key="d2">1000</data>
+  <data key="d3">3</data>
+  <data key="d4">Aether</data>
+  <data key="d5">3</data>
+  <data key="d6">1000</data>
+  <data key="d7">3</data>
+  <data key="d8">3</data>
+  <data key="d9">1000</data>
+  <data key="d10">3</data>
+  <data key="d11">11</data>
+  <data key="d12">1000</data>
+  <data key="d13">4</data>
+</node>
+<node id="Hemera">
+  <data key="d0">2.0</data>
+  <data key="d1">3</data>
+  <data key="d2">1000</data>
+  <data key="d3">3</data>
+  <data key="d4">Hemera</data>
+  <data key="d5">3</data>
+  <data key="d6">1000</data>
+  <data key="d7">3</data>
+  <data key="d8">3</data>
+  <data key="d9">1000</data>
+  <data key="d10">3</data>
+  <data key="d11">11</data>
+  <data key="d12">1000</data>
+  <data key="d13">4</data>
+</node>
+<node id="Moros">
+  <data key="d0">2.0</data>
+  <data key="d1">3</data>
+  <data key="d2">1000</data>
+  <data key="d3">3</data>
+  <data key="d4">Moros</data>
+  <data key="d5">3</data>
+  <data key="d6">1000</data>
+  <data key="d7">3</data>
+  <data key="d8">3</data>
+  <data key="d9">1000</data>
+  <data key="d10">3</data>
+  <data key="d11">11</data>
+  <data key="d12">1000</data>
+  <data key="d13">4</data>
+</node>
+<node id="Oneiroi">
+  <data key="d0">2.0</data>
+  <data key="d1">3</data>
+  <data key="d2">1000</data>
+  <data key="d3">3</data>
+  <data key="d4">Oneiroi</data>
+  <data key="d5">3</data>
+  <data key="d6">1000</data>
+  <data key="d7">3</data>
+  <data key="d8">3</data>
+  <data key="d9">1000</data>
+  <data key="d10">3</data>
+  <data key="d11">11</data>
+  <data key="d12">1000</data>
+  <data key="d13">4</data>
+</node>
+<node id="Nemesis">
+  <data key="d0">2.0</data>
+  <data key="d1">3</data>
+  <data key="d2">1000</data>
+  <data key="d3">3</data>
+  <data key="d4">Nemesis</data>
+  <data key="d5">3</data>
+  <data key="d6">1000</data>
+  <data key="d7">3</data>
+  <data key="d8">3</data>
+  <data key="d9">1000</data>
+  <data key="d10">3</data>
+  <data key="d11">11</data>
+  <data key="d12">1000</data>
+  <data key="d13">4</data>
+</node>
+<node id="Momus">
+  <data key="d0">2.0</data>
+  <data key="d1">3</data>
+  <data key="d2">1000</data>
+  <data key="d3">3</data>
+  <data key="d4">Momus</data>
+  <data key="d5">3</data>
+  <data key="d6">1000</data>
+  <data key="d7">3</data>
+  <data key="d8">3</data>
+  <data key="d9">1000</data>
+  <data key="d10">3</data>
+  <data key="d11">11</data>
+  <data key="d12">1000</data>
+  <data key="d13">4</data>
+</node>
+<node id="Philotes">
+  <data key="d0">2.0</data>
+  <data key="d1">3</data>
+  <data key="d2">1000</data>
+  <data key="d3">3</data>
+  <data key="d4">Philotes</data>
+  <data key="d5">3</data>
+  <data key="d6">1000</data>
+  <data key="d7">3</data>
+  <data key="d8">3</data>
+  <data key="d9">1000</data>
+  <data key="d10">3</data>
+  <data key="d11">11</data>
+  <data key="d12">1000</data>
+  <data key="d13">4</data>
+</node>
+<node id="Geras">
+  <data key="d0">2.0</data>
+  <data key="d1">3</data>
+  <data key="d2">1000</data>
+  <data key="d3">3</data>
+  <data key="d4">Geras</data>
+  <data key="d5">3</data>
+  <data key="d6">1000</data>
+  <data key="d7">3</data>
+  <data key="d8">3</data>
+  <data key="d9">1000</data>
+  <data key="d10">3</data>
+  <data key="d11">11</data>
+  <data key="d12">1000</data>
+  <data key="d13">4</data>
+</node>
+<node id="Thanatos">
+  <data key="d0">2.0</data>
+  <data key="d1">3</data>
+  <data key="d2">1000</data>
+  <data key="d3">3</data>
+  <data key="d4">Thanatos</data>
+  <data key="d5">3</data>
+  <data key="d6">1000</data>
+  <data key="d7">3</data>
+  <data key="d8">3</data>
+  <data key="d9">1000</data>
+  <data key="d10">3</data>
+  <data key="d11">11</data>
+  <data key="d12">1000</data>
+  <data key="d13">4</data>
+</node>
+<node id="Hypnos">
+  <data key="d0">2.0</data>
+  <data key="d1">3</data>
+  <data key="d2">1000</data>
+  <data key="d3">3</data>
+  <data key="d4">Hypnos</data>
+  <data key="d5">3</data>
+  <data key="d6">1000</data>
+  <data key="d7">3</data>
+  <data key="d8">3</data>
+  <data key="d9">1000</data>
+  <data key="d10">3</data>
+  <data key="d11">11</data>
+  <data key="d12">1000</data>
+  <data key="d13">4</data>
+</node>
+<node id="Eris">
+  <data key="d0">2.0</data>
+  <data key="d1">3</data>
+  <data key="d2">1000</data>
+  <data key="d3">3</data>
+  <data key="d4">Eris</data>
+  <data key="d5">3</data>
+  <data key="d6">1000</data>
+  <data key="d7">3</data>
+  <data key="d8">3</data>
+  <data key="d9">1000</data>
+  <data key="d10">3</data>
+  <data key="d11">11</data>
+  <data key="d12">1000</data>
+  <data key="d13">4</data>
+</node>
+<node id="Apate">
+  <data key="d0">2.0</data>
+  <data key="d1">3</data>
+  <data key="d2">1000</data>
+  <data key="d3">3</data>
+  <data key="d4">Apate</data>
+  <data key="d5">3</data>
+  <data key="d6">1000</data>
+  <data key="d7">3</data>
+  <data key="d8">3</data>
+  <data key="d9">1000</data>
+  <data key="d10">3</data>
+  <data key="d11">11</data>
+  <data key="d12">1000</data>
+  <data key="d13">4</data>
+</node>
+<node id="Oizys">
+  <data key="d0">2.0</data>
+  <data key="d1">3</data>
+  <data key="d2">1000</data>
+  <data key="d3">3</data>
+  <data key="d4">Oizys</data>
+  <data key="d5">3</data>
+  <data key="d6">1000</data>
+  <data key="d7">3</data>
+  <data key="d8">3</data>
+  <data key="d9">1000</data>
+  <data key="d10">3</data>
+  <data key="d11">11</data>
+  <data key="d12">1000</data>
+  <data key="d13">4</data>
+</node>
+<node id="Moirai &amp; Keres">
+  <data key="d0">2.0</data>
+  <data key="d1">3</data>
+  <data key="d2">1000</data>
+  <data key="d3">3</data>
+  <data key="d4">Moirai &amp; Keres</data>
+  <data key="d5">3</data>
+  <data key="d6">1000</data>
+  <data key="d7">3</data>
+  <data key="d8">3</data>
+  <data key="d9">1000</data>
+  <data key="d10">3</data>
+  <data key="d11">11</data>
+  <data key="d12">1000</data>
+  <data key="d13">4</data>
+</node>
+<node id="Erinyes">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">1000</data>
+  <data key="d3">4</data>
+  <data key="d4">Erinyes</data>
+  <data key="d5">4</data>
+  <data key="d6">1000</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">1000</data>
+  <data key="d10">4</data>
+  <data key="d11">25</data>
+  <data key="d12">1000</data>
+  <data key="d13">5</data>
+</node>
+<node id="Gigantes">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">1000</data>
+  <data key="d3">4</data>
+  <data key="d4">Gigantes</data>
+  <data key="d5">4</data>
+  <data key="d6">1000</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">1000</data>
+  <data key="d10">4</data>
+  <data key="d11">25</data>
+  <data key="d12">1000</data>
+  <data key="d13">5</data>
+</node>
+<node id="Meliae">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">1000</data>
+  <data key="d3">4</data>
+  <data key="d4">Meliae</data>
+  <data key="d5">4</data>
+  <data key="d6">1000</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">1000</data>
+  <data key="d10">4</data>
+  <data key="d11">25</data>
+  <data key="d12">1000</data>
+  <data key="d13">5</data>
+</node>
+<node id="Aphrodite">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">1000</data>
+  <data key="d3">4</data>
+  <data key="d4">Aphrodite</data>
+  <data key="d5">4</data>
+  <data key="d6">1000</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">1000</data>
+  <data key="d10">4</data>
+  <data key="d11">25</data>
+  <data key="d12">1000</data>
+  <data key="d13">5</data>
+</node>
+<node id="Hecatonchires">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">1000</data>
+  <data key="d3">4</data>
+  <data key="d4">Hecatonchires</data>
+  <data key="d5">4</data>
+  <data key="d6">1000</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">1000</data>
+  <data key="d10">4</data>
+  <data key="d11">1000</data>
+  <data key="d12">1000</data>
+  <data key="d13">1000</data>
+</node>
+<node id="Cyclopes">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">1000</data>
+  <data key="d3">4</data>
+  <data key="d4">Cyclopes</data>
+  <data key="d5">4</data>
+  <data key="d6">1000</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">1000</data>
+  <data key="d10">4</data>
+  <data key="d11">1000</data>
+  <data key="d12">1000</data>
+  <data key="d13">1000</data>
+</node>
+<node id="Echidna">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">1000</data>
+  <data key="d3">4</data>
+  <data key="d4">Echidna</data>
+  <data key="d5">4</data>
+  <data key="d6">1000</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">1000</data>
+  <data key="d10">4</data>
+  <data key="d11">1000</data>
+  <data key="d12">1000</data>
+  <data key="d13">1000</data>
+</node>
+<node id="Oceanus">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">30</data>
+  <data key="d3">4</data>
+  <data key="d4">Oceanus</data>
+  <data key="d5">4</data>
+  <data key="d6">30</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">30</data>
+  <data key="d10">4</data>
+  <data key="d11">1000</data>
+  <data key="d12">30</data>
+  <data key="d13">9</data>
+</node>
+<node id="Tethys">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">30</data>
+  <data key="d3">4</data>
+  <data key="d4">Tethys</data>
+  <data key="d5">4</data>
+  <data key="d6">30</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">30</data>
+  <data key="d10">4</data>
+  <data key="d11">1000</data>
+  <data key="d12">30</data>
+  <data key="d13">9</data>
+</node>
+<node id="Iapetus">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">30</data>
+  <data key="d3">4</data>
+  <data key="d4">Iapetus</data>
+  <data key="d5">4</data>
+  <data key="d6">30</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">30</data>
+  <data key="d10">4</data>
+  <data key="d11">1000</data>
+  <data key="d12">30</data>
+  <data key="d13">1000</data>
+</node>
+<node id="Coeus">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">32</data>
+  <data key="d3">4</data>
+  <data key="d4">Coeus</data>
+  <data key="d5">4</data>
+  <data key="d6">32</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">32</data>
+  <data key="d10">4</data>
+  <data key="d11">1000</data>
+  <data key="d12">32</data>
+  <data key="d13">17</data>
+</node>
+<node id="Phoebe">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">32</data>
+  <data key="d3">4</data>
+  <data key="d4">Phoebe</data>
+  <data key="d5">4</data>
+  <data key="d6">32</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">32</data>
+  <data key="d10">4</data>
+  <data key="d11">1000</data>
+  <data key="d12">32</data>
+  <data key="d13">17</data>
+</node>
+<node id="Cronus">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">32</data>
+  <data key="d3">4</data>
+  <data key="d4">Cronus</data>
+  <data key="d5">4</data>
+  <data key="d6">32</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">32</data>
+  <data key="d10">4</data>
+  <data key="d11">1000</data>
+  <data key="d12">32</data>
+  <data key="d13">11</data>
+</node>
+<node id="Rhea">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">32</data>
+  <data key="d3">4</data>
+  <data key="d4">Rhea</data>
+  <data key="d5">4</data>
+  <data key="d6">32</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">32</data>
+  <data key="d10">4</data>
+  <data key="d11">1000</data>
+  <data key="d12">32</data>
+  <data key="d13">11</data>
+</node>
+<node id="Themis">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">1000</data>
+  <data key="d3">4</data>
+  <data key="d4">Themis</data>
+  <data key="d5">4</data>
+  <data key="d6">1000</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">1000</data>
+  <data key="d10">4</data>
+  <data key="d11">1000</data>
+  <data key="d12">1000</data>
+  <data key="d13">1000</data>
+</node>
+<node id="Mnemosyne">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">1000</data>
+  <data key="d3">4</data>
+  <data key="d4">Mnemosyne</data>
+  <data key="d5">4</data>
+  <data key="d6">1000</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">1000</data>
+  <data key="d10">4</data>
+  <data key="d11">1000</data>
+  <data key="d12">1000</data>
+  <data key="d13">1000</data>
+</node>
+<node id="Hyperion">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">1000</data>
+  <data key="d3">4</data>
+  <data key="d4">Hyperion</data>
+  <data key="d5">4</data>
+  <data key="d6">1000</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">1000</data>
+  <data key="d10">4</data>
+  <data key="d11">1000</data>
+  <data key="d12">1000</data>
+  <data key="d13">1000</data>
+</node>
+<node id="Theia">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">1000</data>
+  <data key="d3">4</data>
+  <data key="d4">Theia</data>
+  <data key="d5">4</data>
+  <data key="d6">1000</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">1000</data>
+  <data key="d10">4</data>
+  <data key="d11">1000</data>
+  <data key="d12">1000</data>
+  <data key="d13">1000</data>
+</node>
+<node id="Crius">
+  <data key="d0">3.0</data>
+  <data key="d1">4</data>
+  <data key="d2">1000</data>
+  <data key="d3">4</data>
+  <data key="d4">Crius</data>
+  <data key="d5">4</data>
+  <data key="d6">1000</data>
+  <data key="d7">4</data>
+  <data key="d8">4</data>
+  <data key="d9">1000</data>
+  <data key="d10">4</data>
+  <data key="d11">1000</data>
+  <data key="d12">1000</data>
+  <data key="d13">1000</data>
+</node>
+<node id="Pleione">
+  <data key="d0">4.0</data>
+  <data key="d1">8</data>
+  <data key="d2">32</data>
+  <data key="d3">5</data>
+  <data key="d4">Pleione</data>
+  <data key="d5">8</data>
+  <data key="d6">32</data>
+  <data key="d7">5</data>
+  <data key="d8">8</data>
+  <data key="d9">32</data>
+  <data key="d10">5</data>
+  <data key="d11">1000</data>
+  <data key="d12">32</data>
+  <data key="d13">17</data>
+</node>
+<node id="Atlas">
+  <data key="d0">4.0</data>
+  <data key="d1">8</data>
+  <data key="d2">32</data>
+  <data key="d3">5</data>
+  <data key="d4">Atlas</data>
+  <data key="d5">8</data>
+  <data key="d6">32</data>
+  <data key="d7">5</data>
+  <data key="d8">8</data>
+  <data key="d9">32</data>
+  <data key="d10">5</data>
+  <data key="d11">1000</data>
+  <data key="d12">32</data>
+  <data key="d13">17</data>
+</node>
+<node id="Leto">
+  <data key="d0">4.0</data>
+  <data key="d1">8</data>
+  <data key="d2">39</data>
+  <data key="d3">6</data>
+  <data key="d4">Leto</data>
+  <data key="d5">8</data>
+  <data key="d6">39</data>
+  <data key="d7">6</data>
+  <data key="d8">8</data>
+  <data key="d9">39</data>
+  <data key="d10">6</data>
+  <data key="d11">1000</data>
+  <data key="d12">39</data>
+  <data key="d13">18</data>
+</node>
+<node id="Zeus">
+  <data key="d0">4.0</data>
+  <data key="d1">8</data>
+  <data key="d2">39</data>
+  <data key="d3">6</data>
+  <data key="d4">Zeus</data>
+  <data key="d5">8</data>
+  <data key="d6">39</data>
+  <data key="d7">6</data>
+  <data key="d8">8</data>
+  <data key="d9">39</data>
+  <data key="d10">6</data>
+  <data key="d11">47</data>
+  <data key="d12">39</data>
+  <data key="d13">18</data>
+</node>
+<node id="Hera">
+  <data key="d0">4.0</data>
+  <data key="d1">8</data>
+  <data key="d2">39</data>
+  <data key="d3">6</data>
+  <data key="d4">Hera</data>
+  <data key="d5">8</data>
+  <data key="d6">39</data>
+  <data key="d7">6</data>
+  <data key="d8">8</data>
+  <data key="d9">39</data>
+  <data key="d10">6</data>
+  <data key="d11">47</data>
+  <data key="d12">39</data>
+  <data key="d13">18</data>
+</node>
+<node id="Poseidon">
+  <data key="d0">4.0</data>
+  <data key="d1">8</data>
+  <data key="d2">1000</data>
+  <data key="d3">6</data>
+  <data key="d4">Poseidon</data>
+  <data key="d5">8</data>
+  <data key="d6">1000</data>
+  <data key="d7">6</data>
+  <data key="d8">8</data>
+  <data key="d9">1000</data>
+  <data key="d10">6</data>
+  <data key="d11">47</data>
+  <data key="d12">1000</data>
+  <data key="d13">18</data>
+</node>
+<node id="Hestia">
+  <data key="d0">4.0</data>
+  <data key="d1">8</data>
+  <data key="d2">1000</data>
+  <data key="d3">6</data>
+  <data key="d4">Hestia</data>
+  <data key="d5">8</data>
+  <data key="d6">1000</data>
+  <data key="d7">6</data>
+  <data key="d8">8</data>
+  <data key="d9">1000</data>
+  <data key="d10">6</data>
+  <data key="d11">47</data>
+  <data key="d12">1000</data>
+  <data key="d13">18</data>
+</node>
+<node id="Hades">
+  <data key="d0">4.0</data>
+  <data key="d1">8</data>
+  <data key="d2">1000</data>
+  <data key="d3">6</data>
+  <data key="d4">Hades</data>
+  <data key="d5">8</data>
+  <data key="d6">1000</data>
+  <data key="d7">6</data>
+  <data key="d8">8</data>
+  <data key="d9">1000</data>
+  <data key="d10">6</data>
+  <data key="d11">47</data>
+  <data key="d12">1000</data>
+  <data key="d13">18</data>
+</node>
+<node id="Demeter">
+  <data key="d0">4.0</data>
+  <data key="d1">8</data>
+  <data key="d2">1000</data>
+  <data key="d3">6</data>
+  <data key="d4">Demeter</data>
+  <data key="d5">8</data>
+  <data key="d6">1000</data>
+  <data key="d7">6</data>
+  <data key="d8">8</data>
+  <data key="d9">1000</data>
+  <data key="d10">6</data>
+  <data key="d11">47</data>
+  <data key="d12">1000</data>
+  <data key="d13">18</data>
+</node>
+<node id="Dionysus">
+  <data key="d0">5.0</data>
+  <data key="d1">11</data>
+  <data key="d2">1000</data>
+  <data key="d3">7</data>
+  <data key="d4">Dionysus</data>
+  <data key="d5">11</data>
+  <data key="d6">1000</data>
+  <data key="d7">7</data>
+  <data key="d8">11</data>
+  <data key="d9">1000</data>
+  <data key="d10">7</data>
+  <data key="d11">55</data>
+  <data key="d12">1000</data>
+  <data key="d13">19</data>
+</node>
+<node id="Semele">
+  <data key="d0">0.0</data>
+  <data key="d1">1000</data>
+  <data key="d2">39</data>
+  <data key="d3">6</data>
+  <data key="d4">Semele</data>
+  <data key="d5">1000</data>
+  <data key="d6">39</data>
+  <data key="d7">6</data>
+  <data key="d8">1000</data>
+  <data key="d9">39</data>
+  <data key="d10">6</data>
+  <data key="d11">1000</data>
+  <data key="d12">39</data>
+  <data key="d13">18</data>
+</node>
+<node id="Maia">
+  <data key="d0">5.0</data>
+  <data key="d1">1000</data>
+  <data key="d2">39</data>
+  <data key="d3">6</data>
+  <data key="d4">Maia</data>
+  <data key="d5">1000</data>
+  <data key="d6">39</data>
+  <data key="d7">6</data>
+  <data key="d8">1000</data>
+  <data key="d9">39</data>
+  <data key="d10">6</data>
+  <data key="d11">1000</data>
+  <data key="d12">39</data>
+  <data key="d13">18</data>
+</node>
+<node id="Hermes">
+  <data key="d0">6.0</data>
+  <data key="d1">11</data>
+  <data key="d2">1000</data>
+  <data key="d3">7</data>
+  <data key="d4">Hermes</data>
+  <data key="d5">11</data>
+  <data key="d6">1000</data>
+  <data key="d7">7</data>
+  <data key="d8">11</data>
+  <data key="d9">1000</data>
+  <data key="d10">7</data>
+  <data key="d11">55</data>
+  <data key="d12">1000</data>
+  <data key="d13">19</data>
+</node>
+<node id="Apollo">
+  <data key="d0">5.0</data>
+  <data key="d1">11</data>
+  <data key="d2">1000</data>
+  <data key="d3">7</data>
+  <data key="d4">Apollo</data>
+  <data key="d5">11</data>
+  <data key="d6">1000</data>
+  <data key="d7">7</data>
+  <data key="d8">11</data>
+  <data key="d9">1000</data>
+  <data key="d10">7</data>
+  <data key="d11">55</data>
+  <data key="d12">1000</data>
+  <data key="d13">19</data>
+</node>
+<node id="Artemis">
+  <data key="d0">5.0</data>
+  <data key="d1">11</data>
+  <data key="d2">1000</data>
+  <data key="d3">7</data>
+  <data key="d4">Artemis</data>
+  <data key="d5">11</data>
+  <data key="d6">1000</data>
+  <data key="d7">7</data>
+  <data key="d8">11</data>
+  <data key="d9">1000</data>
+  <data key="d10">7</data>
+  <data key="d11">55</data>
+  <data key="d12">1000</data>
+  <data key="d13">19</data>
+</node>
+<node id="Athena">
+  <data key="d0">5.0</data>
+  <data key="d1">11</data>
+  <data key="d2">1000</data>
+  <data key="d3">7</data>
+  <data key="d4">Athena</data>
+  <data key="d5">11</data>
+  <data key="d6">1000</data>
+  <data key="d7">7</data>
+  <data key="d8">11</data>
+  <data key="d9">1000</data>
+  <data key="d10">7</data>
+  <data key="d11">55</data>
+  <data key="d12">1000</data>
+  <data key="d13">19</data>
+</node>
+<node id="Hephaestus">
+  <data key="d0">5.0</data>
+  <data key="d1">11</data>
+  <data key="d2">1000</data>
+  <data key="d3">7</data>
+  <data key="d4">Hephaestus</data>
+  <data key="d5">11</data>
+  <data key="d6">1000</data>
+  <data key="d7">7</data>
+  <data key="d8">11</data>
+  <data key="d9">1000</data>
+  <data key="d10">7</data>
+  <data key="d11">55</data>
+  <data key="d12">1000</data>
+  <data key="d13">19</data>
+</node>
+<node id="Ares">
+  <data key="d0">5.0</data>
+  <data key="d1">11</data>
+  <data key="d2">1000</data>
+  <data key="d3">7</data>
+  <data key="d4">Ares</data>
+  <data key="d5">11</data>
+  <data key="d6">1000</data>
+  <data key="d7">7</data>
+  <data key="d8">11</data>
+  <data key="d9">1000</data>
+  <data key="d10">7</data>
+  <data key="d11">55</data>
+  <data key="d12">1000</data>
+  <data key="d13">19</data>
+</node>
+<edge source="Chaos" target="Tartarus"/>
+<edge source="Chaos" target="Gaia"/>
+<edge source="Chaos" target="Eros"/>
+<edge source="Chaos" target="Erebus"/>
+<edge source="Chaos" target="Nyx"/>
+<edge source="Tartarus" target="Typhon"/>
+<edge source="Gaia" target="Typhon"/>
+<edge source="Gaia" target="Uranus"/>
+<edge source="Gaia" target="Ourea"/>
+<edge source="Gaia" target="Pontus"/>
+<edge source="Gaia" target="Hecatonchires"/>
+<edge source="Gaia" target="Cyclopes"/>
+<edge source="Gaia" target="Echidna"/>
+<edge source="Gaia" target="Oceanus"/>
+<edge source="Gaia" target="Tethys"/>
+<edge source="Gaia" target="Iapetus"/>
+<edge source="Gaia" target="Coeus"/>
+<edge source="Gaia" target="Phoebe"/>
+<edge source="Gaia" target="Cronus"/>
+<edge source="Gaia" target="Rhea"/>
+<edge source="Gaia" target="Themis"/>
+<edge source="Gaia" target="Mnemosyne"/>
+<edge source="Gaia" target="Hyperion"/>
+<edge source="Gaia" target="Theia"/>
+<edge source="Gaia" target="Crius"/>
+<edge source="Erebus" target="Aether"/>
+<edge source="Erebus" target="Hemera"/>
+<edge source="Nyx" target="Aether"/>
+<edge source="Nyx" target="Hemera"/>
+<edge source="Nyx" target="Moros"/>
+<edge source="Nyx" target="Oneiroi"/>
+<edge source="Nyx" target="Nemesis"/>
+<edge source="Nyx" target="Momus"/>
+<edge source="Nyx" target="Philotes"/>
+<edge source="Nyx" target="Geras"/>
+<edge source="Nyx" target="Thanatos"/>
+<edge source="Nyx" target="Hypnos"/>
+<edge source="Nyx" target="Eris"/>
+<edge source="Nyx" target="Apate"/>
+<edge source="Nyx" target="Oizys"/>
+<edge source="Nyx" target="Moirai &amp; Keres"/>
+<edge source="Uranus" target="Erinyes"/>
+<edge source="Uranus" target="Gigantes"/>
+<edge source="Uranus" target="Meliae"/>
+<edge source="Uranus" target="Aphrodite"/>
+<edge source="Uranus" target="Hecatonchires"/>
+<edge source="Uranus" target="Cyclopes"/>
+<edge source="Uranus" target="Echidna"/>
+<edge source="Uranus" target="Oceanus"/>
+<edge source="Uranus" target="Tethys"/>
+<edge source="Uranus" target="Iapetus"/>
+<edge source="Uranus" target="Coeus"/>
+<edge source="Uranus" target="Phoebe"/>
+<edge source="Uranus" target="Cronus"/>
+<edge source="Uranus" target="Rhea"/>
+<edge source="Uranus" target="Themis"/>
+<edge source="Uranus" target="Mnemosyne"/>
+<edge source="Uranus" target="Hyperion"/>
+<edge source="Uranus" target="Theia"/>
+<edge source="Uranus" target="Crius"/>
+<edge source="Oceanus" target="Pleione"/>
+<edge source="Tethys" target="Pleione"/>
+<edge source="Iapetus" target="Atlas"/>
+<edge source="Coeus" target="Leto"/>
+<edge source="Phoebe" target="Leto"/>
+<edge source="Cronus" target="Zeus"/>
+<edge source="Cronus" target="Hera"/>
+<edge source="Cronus" target="Poseidon"/>
+<edge source="Cronus" target="Hestia"/>
+<edge source="Cronus" target="Hades"/>
+<edge source="Cronus" target="Demeter"/>
+<edge source="Rhea" target="Zeus"/>
+<edge source="Rhea" target="Hera"/>
+<edge source="Rhea" target="Poseidon"/>
+<edge source="Rhea" target="Hestia"/>
+<edge source="Rhea" target="Hades"/>
+<edge source="Rhea" target="Demeter"/>
+<edge source="Pleione" target="Maia"/>
+<edge source="Atlas" target="Maia"/>
+<edge source="Leto" target="Apollo"/>
+<edge source="Leto" target="Artemis"/>
+<edge source="Zeus" target="Dionysus"/>
+<edge source="Zeus" target="Hermes"/>
+<edge source="Zeus" target="Apollo"/>
+<edge source="Zeus" target="Artemis"/>
+<edge source="Zeus" target="Athena"/>
+<edge source="Zeus" target="Hephaestus"/>
+<edge source="Zeus" target="Ares"/>
+<edge source="Hera" target="Hephaestus"/>
+<edge source="Hera" target="Ares"/>
+<edge source="Semele" target="Dionysus"/>
+<edge source="Maia" target="Hermes"/>
+</graph></graphml>
