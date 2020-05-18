@@ -46,6 +46,17 @@ class sgd2{
    */
   adjacencyStep(nodeI,nodeJ){
 
+    let reachable = this.graph.adjacentNodesNames(nodeI);
+    if(reachable.includes(nodeJ)){
+      //this means nodeI and nodeJ are adjacent
+      return 1;
+    }
+    let found = false;
+    let distance = 1;
+    
+    while(!found){
+
+    }
   }
 
 

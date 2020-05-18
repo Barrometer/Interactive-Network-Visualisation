@@ -125,10 +125,10 @@ exports.networkGraph = class {
     return linksWithNodeIn;
   }
   /**
-   * Returns an array containing all the nodes a node is linked to
+   * Returns an array containing all the nodes a node is adjacent to
    * @param {string} nodeName 
    */
-  findNodesLinkedToNode(nodeName) {
+  adjacentNodes(nodeName) {
     let linksWithNodeIn = this.findLinksWithNodeIn(nodeName);
     
     let linkedNodes = [];
@@ -145,11 +145,38 @@ exports.networkGraph = class {
         linkedNodes.push(theLinkedNode);
       } 
       else {
-        console.log("Something has gone wrong with findNodesLinkedToNode");
+        console.log("Something has gone wrong with adjacentNodes");
       }
     }
     return linkedNodes;
   }
+  /**
+   * Returns an array containing the names of all the nodes a node is adjacent to
+   * @param {string} nodeName 
+   */
+  adjacentNodesNames(startNode){
+    let linksWithNodeIn = this.findLinksWithNodeIn(nodeName);
+    
+    let linkedNodes = [];
+    for (const linkName of linksWithNodeIn) {
+      let link = this.links.get(linkName);
+      if (link.from != nodeName) {
+        //ie the link is to nodeName
+        let theLinkedNode = this.nodes.get(link.from)
+        linkedNodes.push(theLinkedNode.name);
+      }
+      else if (link.to != nodeName) {
+        //ie the link is from nodeName
+        let theLinkedNode = this.nodes.get(link.to)
+        linkedNodes.push(theLinkedNode.name);
+      } 
+      else {
+        console.log("Something has gone wrong with adjacentNodesNames");
+      }
+    }
+    return linkedNodes;
+  }
+
   /**
    * If a node exists in the network, sets it's coords to the specified values
    * Does not update

@@ -40,7 +40,7 @@ exports.eadesForceSimulator = class{
     for (let[key1,node1] of graph.nodes) {
       let forceOnNode = {x: 0, y:0, z: 0};
       let node1Position = node1.coords;
-      let nodesConnectedtoNode1 = graph.findNodesLinkedToNode(key1);
+      let nodesConnectedtoNode1 = graph.adjacentNodes(key1);
       //console.log(nodesConnectedtoNode1);
       for (let [key2,node2] of graph.nodes) {
         if(key1 != key2) { //this should prevent calculating the force of a node on itself
