@@ -33,8 +33,11 @@ class sgd2{
         }
         else{
           if(!this.adjacencyMap.has(alternateName)){ //ie only do ij if not done ji
-            
+            let distance = this.adjacencyStep(keyI,keyJ);
+            this.adjacencyMap.set(mainName,distance);
           }
+
+
         }
       }
     }
@@ -52,10 +55,23 @@ class sgd2{
       return 1;
     }
     let found = false;
-    let distance = 1;
+    let distance = 2;
     
     while(!found){
-
+      let reachableChildren = [];
+      for (let node in reachable){
+        let tempReachable = this.graph.adjacentNodesNames(node);
+        if(tempReachable.includes(nodeJ)){ // ie if we can find it
+          return distance;
+        }
+        //otherwise add this lot of reachable nodes to the storage
+        tempReachable.forEach(function(item){
+          reachableChildren.push(item);
+        });
+      }
+      //if here, none of the reachable nodes is nodeJ, need to explore next depth
+      distance++;
+      reachable=reachableChildren;
     }
   }
 
