@@ -5,6 +5,20 @@
 
 var network = require("./network");
 
+class nodePair{
+  /**
+   * 
+   * @param {string} iName 
+   * @param {string} jName 
+   * @param {number} distance 
+   */
+  constructor(iName,jName,distance){
+    this.i = iName;
+    this.j = jName;
+    this.distance = distance;
+  }
+}
+
 class sgd2{
   /**
    * 
@@ -16,9 +30,15 @@ class sgd2{
     this.graph = graph
     /**
      * The map between pairs of nodes and a distance
-     *@type {Map<String,Number>}
+     *@type {Map<String,nodePair>}
      */
-    this.adjacencyMap = new Map();
+    this.termMap = new Map();
+    /**
+     * @type {String[]}
+     */
+    this.termNameArray = [];
+    this.buildAdjacenyMap();
+    
   }
   /**
    * Iterate over all nodes in graph, build an adjaceny graph for it
@@ -34,13 +54,18 @@ class sgd2{
         else{
           if(!this.adjacencyMap.has(alternateName)){ //ie only do ij if not done ji
             let distance = this.adjacencyStep(keyI,keyJ);
-            this.adjacencyMap.set(mainName,distance);
+            let term = new nodePair(keyI,keyJ,distance);
+            this.termMap.set(mainName,term);
           }
 
 
         }
       }
     }
+    //at this point, we have a map with NC2 elements, where N is the number of nodes in the graph
+    //We also want an array of every node in the map for use later.
+    this.termNameArray = Array.from(this.termMap.keys());
+    
   }
   /**
    * Works out the distance between two nodes using a breadth first approach
@@ -74,13 +99,96 @@ class sgd2{
       reachable=reachableChildren;
     }
   }
-
-
   /**
-   * Need to:
-   *  1. Build adjacency
-   *  2. Randomly pick pairs of nodes
-   *    2.a Calculate r
-   *    2.b Update nodes
+   * Perform an iteration of SGD2
    */
+  sgd2Iteration(){
+    //first want to shuffle terms
+    this.shuffleFisherYates();
+    //now want to go through each term, and apply an sgd2 step
+    for (let termName in this.termNameArray){
+      let term = this.termMap.get(termName);
+      let nodeIName = term.i;
+      let nodeJName = term.j;
+      let idealDistance = term.distance;
+      let nodeI = this.graph.nodes.get(nodeIName);
+      let nodeJ = this.graph.nodes.get(nodeJName);
+
+      let nodeICoords = this.graph.getNodeCoord(nodeIName);
+      let nodeJCoords = this.graph.getNodeCoord(nodeJName);
+
+      //calculate r vector
+      /*
+        r = (||Xi-Xj||-dij)/2 * (Xi-Xj/||Xi-Xj||)
+      */
+      let differenceIJ = sub3DVector(nodeICoords,nodeJCoords);
+      let normIJ = length3DVector(differenceIJ);
+    }
+  }
+  /**
+   * Shuffles the termNameArray using the Fisher-Yates algorithm
+   */ 
+  shuffleFisherYates(){
+    for (let i = this.termNameArray.length-1; i>0; i--){
+      const j = Math.floor(Math.random()*(i+1));
+      let temp = this.termNameArray[i];
+      this.termNameArray[i] = this.termNameArray[j];
+      this.termNameArray[j] = temp;
+    }
+  }
+  
+}
+
+
+function add3DVector(vector1, vector2){
+  return {x: vector1.x + vector2.x, y: vector1.y + vector2.y, z: vector1.z + vector2.z}
+}
+/**
+ * Calculates vector1-vector2
+ * @param {Object} vector1 
+ * @param {number} vector1.x
+ * @param {number} vector1.y
+ * @param {number} vector1.z
+ * @param {Object} vector2
+ * @param {number} vector2.x
+ * @param {number} vector2.y
+ * @param {number} vector2.z 
+ */
+function sub3DVector(vector1, vector2){
+  return {x: vector1.x - vector2.x, y: vector1.y - vector2.y, z: vector1.z - vector2.z}
+}
+/**
+ * Returns lenth of a 3d vector
+ * @param {object} vector
+ * @param {number} vector.x
+ * @param {number} vector.y
+ * @param {number} vector.z 
+ */
+function length3DVector(vector) {
+  let squaredSum = Math.pow(vector.x,2) + Math.pow(vector.y,2) + Math.pow(vector.z,2);
+  return Math.sqrt(squaredSum);
+}
+/**
+ * Normalises the input 3D vector
+ * @param {object} vector
+ * @param {number} vector.x
+ * @param {number} vector.y
+ * @param {number} vector.z 
+ */
+function normalise3DVector(vector){
+  let length = length3DVector(vector);
+  vector.x = vector.x/length;
+  vector.y = vector.y/length;
+  vector.z = vector.z/length;
+}
+/**
+ * Returns the product of a scalar and a vector
+ * @param {object} vector
+ * @param {number} vector.x
+ * @param {number} vector.y
+ * @param {number} vector.z 
+ * @param {number} scalar
+ */
+function scalarTimes3DVector(scalar, vector){
+  return {x: scalar*vector.x, y: scalar*vector.y, z: scalar*vector.z}
 }

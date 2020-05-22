@@ -29,9 +29,9 @@ var meshMaterial = new THREE.MeshBasicMaterial({color:0xffff0});
 var meshGeometry = new THREE.BoxBufferGeometry(1,1,1);
 var mouse = new THREE.Vector2();
 var params = {
-  c1: 2,
-  c2: 3,
-  c3: 3,
+  c1: 5,
+  c2: 10,
+  c3: 10,
   c4: 0.1,
   iterations: 100
 }
