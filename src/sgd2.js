@@ -24,10 +24,11 @@ class sgd2{
    * 
    * @param {network.networkGraph} graph 
    */
-  constructor(graph) {
+  constructor(graph,epsilon) {
     this.stress = 0;
     this.weightExponent = -2;
     this.graph = graph
+    this.epsilon = epsilon;
     /**
      * The map between pairs of nodes and a distance
      *@type {Map<String,nodePair>}
@@ -38,6 +39,13 @@ class sgd2{
      */
     this.termNameArray = [];
     this.buildAdjacenyMap();
+    this.dMin = this.findMinDistanceInGraph();
+    this.dMax = this.findMaxDistanceInGraph();
+
+    this.wMin = Math.min(Math.pow(this.dMax, this.weightExponent), Math.pow(this.dMin, this.weightExponent));
+    this.wMax = Math.max(Math.pow(this.dMax, this.weightExponent), Math.pow(this.dMin, this.weightExponent));
+    this.etaMax = 1/this.wMin;
+    this.etaMin = this.epsilon/this.wMax;
     
   }
   /**
@@ -136,7 +144,24 @@ class sgd2{
       this.termNameArray[j] = temp;
     }
   }
-  
+  /**
+   *Iterates over map, returns minimum distance
+   */
+  findMinDistanceInGraph(){
+    let values = Array.from(this.termMap.values());
+    let minimumPair = values.reduce(function(prev,curr){
+      return prev.distance < curr.distance ? prev : curr;
+    });
+    return minimumPair.distance;
+  }
+
+  findMaxDistanceInGraph(){
+    let values = Array.from(this.termMap.values());
+    let maximumPair = values.reduce(function(prev,curr){
+      return prev.distance < curr.distance ? curr : prev;
+    });
+    return maximumPair.distance;
+  }
 }
 
 
