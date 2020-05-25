@@ -10,23 +10,25 @@ class nodePair{
    * 
    * @param {string} iName 
    * @param {string} jName 
-   * @param {number} distance 
+   * @param {number} distance
+   * @param {number} weight
    */
-  constructor(iName,jName,distance){
+  constructor(iName,jName,distance,weight){
     this.i = iName;
     this.j = jName;
     this.distance = distance;
+    this.weight = weight;
   }
 }
 
-class sgd2{
+exports.sgd2 = class{
   /**
    * 
    * @param {network.networkGraph} graph 
    */
   constructor(graph,epsilon) {
     this.stress = 0;
-    this.weightExponent = -2;
+    this.weightExponent = -2; // must be less than 0;
     this.graph = graph
     this.epsilon = epsilon;
     /**
@@ -42,12 +44,23 @@ class sgd2{
     this.dMin = this.findMinDistanceInGraph();
     this.dMax = this.findMaxDistanceInGraph();
 
-    this.wMin = Math.min(Math.pow(this.dMax, this.weightExponent), Math.pow(this.dMin, this.weightExponent));
-    this.wMax = Math.max(Math.pow(this.dMax, this.weightExponent), Math.pow(this.dMin, this.weightExponent));
+    this.wMin = Math.pow(this.dMax,this.weightExponent);
+    this.wMax = Math.pow(this.dMin,this.weightExponent);
     this.etaMax = 1/this.wMin;
     this.etaMin = this.epsilon/this.wMax;
-    
+    this.etaT;
   }
+  /**
+   * A test function that prints key data
+   */
+  print(){
+    console.log("dMin = " + this.dMin);
+    console.log("dMax = " + this.dMax);
+    for (let [key,value] of this.termMap){
+      console.log("Term is called" + key +", distance is " + value.distance);
+    }
+  }
+
   /**
    * Iterate over all nodes in graph, build an adjaceny graph for it
    */
@@ -57,12 +70,16 @@ class sgd2{
         let mainName = "pair"+keyI+"with"+keyJ;
         let alternateName = "pair"+keyJ+"with"+keyI;
         if(keyI == keyJ){ //ie they're the same node
-          this.adjacencyMap.set(mainName,0);
+          let term = new nodePair(keyI,keyJ,0,0);
+          this.termMap.set(mainName,term);
+          
+
         }
         else{
-          if(!this.adjacencyMap.has(alternateName)){ //ie only do ij if not done ji
+          if(!this.termMap.has(alternateName)){ //ie only do ij if not done ji
             let distance = this.adjacencyStep(keyI,keyJ);
-            let term = new nodePair(keyI,keyJ,distance);
+            let weight = Math.pow(distance,this.weightExponent);
+            let term = new nodePair(keyI,keyJ,distance,weight);
             this.termMap.set(mainName,term);
           }
 
@@ -81,10 +98,12 @@ class sgd2{
    * @param {string} nodeJ 
    */
   adjacencyStep(nodeI,nodeJ){
-
+    //console.log("Looking for " + nodeI + ", "+nodeJ)
     let reachable = this.graph.adjacentNodesNames(nodeI);
+    //console.log(reachable);
     if(reachable.includes(nodeJ)){
       //this means nodeI and nodeJ are adjacent
+      //console.log("Found, distance 1");
       return 1;
     }
     let found = false;
@@ -92,19 +111,26 @@ class sgd2{
     
     while(!found){
       let reachableChildren = [];
-      for (let node in reachable){
-        let tempReachable = this.graph.adjacentNodesNames(node);
+      for (let index in reachable){
+        let consideredNode = reachable[index];
+        //console.log("Considering child " + consideredNode)
+        let tempReachable = this.graph.adjacentNodesNames(consideredNode);
+        //console.log(tempReachable);
         if(tempReachable.includes(nodeJ)){ // ie if we can find it
+          //console.log("Found, distance " + distance)
           return distance;
         }
         //otherwise add this lot of reachable nodes to the storage
         tempReachable.forEach(function(item){
           reachableChildren.push(item);
         });
+        //console.log("Not found")
       }
       //if here, none of the reachable nodes is nodeJ, need to explore next depth
       distance++;
       reachable=reachableChildren;
+      
+      
     }
   }
   /**
@@ -119,6 +145,8 @@ class sgd2{
       let nodeIName = term.i;
       let nodeJName = term.j;
       let idealDistance = term.distance;
+      let pairWeight = term.weight;
+      
       let nodeI = this.graph.nodes.get(nodeIName);
       let nodeJ = this.graph.nodes.get(nodeJName);
 
@@ -131,6 +159,11 @@ class sgd2{
       */
       let differenceIJ = sub3DVector(nodeICoords,nodeJCoords);
       let normIJ = length3DVector(differenceIJ);
+      let rScalarPart = (normIJ - idealDistance) / 2;
+      let rVectorPart = scalarTimes3DVector(differenceIJ, 1 / normIJ);
+      let r = scalarTimes3DVector(rVectorPart,rScalarPart);
+
+      let mu =  Math.min(1, pairWeight * this.etaT);
     }
   }
   /**

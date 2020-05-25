@@ -152,20 +152,20 @@ exports.networkGraph = class {
   }
   /**
    * Returns an array containing the names of all the nodes a node is adjacent to
-   * @param {string} nodeName 
+   * @param {string} startNode 
    */
   adjacentNodesNames(startNode){
-    let linksWithNodeIn = this.findLinksWithNodeIn(nodeName);
+    let linksWithNodeIn = this.findLinksWithNodeIn(startNode);
     
     let linkedNodes = [];
     for (const linkName of linksWithNodeIn) {
       let link = this.links.get(linkName);
-      if (link.from != nodeName) {
+      if (link.from != startNode) {
         //ie the link is to nodeName
         let theLinkedNode = this.nodes.get(link.from)
         linkedNodes.push(theLinkedNode.name);
       }
-      else if (link.to != nodeName) {
+      else if (link.to != startNode) {
         //ie the link is from nodeName
         let theLinkedNode = this.nodes.get(link.to)
         linkedNodes.push(theLinkedNode.name);
