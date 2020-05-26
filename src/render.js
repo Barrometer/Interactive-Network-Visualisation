@@ -17,14 +17,23 @@ var graphgenerator = require("./graphgenerator");
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 var dat = require("dat.gui");
 
+import greekData from "./../data/greek_gods.json";
+
+
+
+let betterData = JSON.stringify(greekData);
+//console.log(betterData);
+
 //INIT
 
 var INTERSECTED;
 var numIterations = 30;
 var myGenerator = new graphgenerator.dagGenerator(50,1.2);
 myGenerator.randomise();
-var myGraph = myGenerator.graph;
-
+//var myGraph = myGenerator.graph;
+var myGraph = new network.networkGraph();
+myGraph.load(betterData);
+myGraph.randomiseNodeLocations();
 var meshMaterial = new THREE.MeshBasicMaterial({color:0xffff0});
 var meshGeometry = new THREE.BoxBufferGeometry(1,1,1);
 var mouse = new THREE.Vector2();
