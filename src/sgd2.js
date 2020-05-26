@@ -25,11 +25,13 @@ exports.sgd2 = class{
   /**
    * 
    * @param {network.networkGraph} graph 
+   * @param {number} epsilon
+   * @param {number} maxIter
    */
-  constructor(graph,epsilon) {
+  constructor(graph,epsilon,maxIter) {
     this.stress = 0;
     this.weightExponent = -2; // must be less than 0;
-    this.graph = graph
+    this.graph = graph;
     this.epsilon = epsilon;
     /**
      * The map between pairs of nodes and a distance
@@ -48,7 +50,13 @@ exports.sgd2 = class{
     this.wMax = Math.pow(this.dMin,this.weightExponent);
     this.etaMax = 1/this.wMin;
     this.etaMin = this.epsilon/this.wMax;
-    this.etaT;
+    this.maxIter = maxIter;
+
+    /**
+     * -lambda for use in calculating eta(t)
+     */
+    this.negLambda = Math.log(this.etaMin/this.etaMax) / (this.maxIter - 1);
+    this.currIter = 0;
   }
   /**
    * A test function that prints key data
@@ -140,6 +148,9 @@ exports.sgd2 = class{
     //first want to shuffle terms
     this.shuffleFisherYates();
     //now want to go through each term, and apply an sgd2 step
+
+    let etaT = this.etaMax * Math.exp(this.currIter * this.negLambda);
+
     for (let termName in this.termNameArray){
       let term = this.termMap.get(termName);
       let nodeIName = term.i;
@@ -147,8 +158,7 @@ exports.sgd2 = class{
       let idealDistance = term.distance;
       let pairWeight = term.weight;
       
-      let nodeI = this.graph.nodes.get(nodeIName);
-      let nodeJ = this.graph.nodes.get(nodeJName);
+      
 
       let nodeICoords = this.graph.getNodeCoord(nodeIName);
       let nodeJCoords = this.graph.getNodeCoord(nodeJName);
@@ -163,8 +173,13 @@ exports.sgd2 = class{
       let rVectorPart = scalarTimes3DVector(differenceIJ, 1 / normIJ);
       let r = scalarTimes3DVector(rVectorPart,rScalarPart);
 
-      let mu =  Math.min(1, pairWeight * this.etaT);
+      let mu =  Math.min(1, pairWeight * etaT);
+      r = scalarTimes3DVector(r,mu);
+      this.graph.applyMotionVectorToNode(nodeIName,r)
+      let deltaJ =  scalarTimes3DVector(r,-1);
+      this.graph.applyMotionVectorToNode(nodeJName,deltaJ);
     }
+    this.currIter++;
   }
   /**
    * Shuffles the termNameArray using the Fisher-Yates algorithm
