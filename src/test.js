@@ -8,12 +8,12 @@ let graph = new network.networkGraph();
 
 graph.addLink("A","B");
 graph.addLink("A","C");
-/*graph.addLink("A","G");
+graph.addLink("A","G");
 graph.addLink("B","D");
 graph.addLink("D","E");
 graph.addLink("C","E");
 graph.addLink("E","F");
-graph.addLink("F","G");*/
+graph.addLink("F","G");
 
 graph.randomiseNodeLocations();
 let mySGD2 = new sgd2.sgd2(graph,0.1,30);
