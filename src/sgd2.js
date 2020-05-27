@@ -78,10 +78,8 @@ exports.sgd2 = class{
         let mainName = "pair"+keyI+"with"+keyJ;
         let alternateName = "pair"+keyJ+"with"+keyI;
         if(keyI == keyJ){ //ie they're the same node
-          let term = new nodePair(keyI,keyJ,0,0);
-          this.termMap.set(mainName,term);
-          
-
+          //let term = new nodePair(keyI,keyJ,0,0);
+          //this.termMap.set(mainName,term);
         }
         else{
           if(!this.termMap.has(alternateName)){ //ie only do ij if not done ji
@@ -149,15 +147,22 @@ exports.sgd2 = class{
     this.shuffleFisherYates();
     //now want to go through each term, and apply an sgd2 step
 
+    /*
+    console.log("etaMax = " + this.etaMax);
+    console.log("etaMin = " + this.etaMin);
+    console.log("currIter = " + this.currIter);
+    console.log("negLambda = " + this.negLambda);
+    */
     let etaT = this.etaMax * Math.exp(this.currIter * this.negLambda);
-
-    for (let termName in this.termNameArray){
+    //console.log("etaT = " + etaT);
+    for (let index in this.termNameArray){
+      let termName = this.termNameArray[index];
+      //console.log("Test, termName = " +termName)
       let term = this.termMap.get(termName);
       let nodeIName = term.i;
       let nodeJName = term.j;
       let idealDistance = term.distance;
       let pairWeight = term.weight;
-      
       
 
       let nodeICoords = this.graph.getNodeCoord(nodeIName);
@@ -168,15 +173,21 @@ exports.sgd2 = class{
         r = (||Xi-Xj||-dij)/2 * (Xi-Xj/||Xi-Xj||)
       */
       let differenceIJ = sub3DVector(nodeICoords,nodeJCoords);
+      //console.log("Difference is " + differenceIJ);
       let normIJ = length3DVector(differenceIJ);
+      //console.log("Norm is " + normIJ);
       let rScalarPart = (normIJ - idealDistance) / 2;
-      let rVectorPart = scalarTimes3DVector(differenceIJ, 1 / normIJ);
-      let r = scalarTimes3DVector(rVectorPart,rScalarPart);
-
+      //console.log("rScalar is " + rScalarPart);
+      let rVectorPart = scalarTimes3DVector( (1 / normIJ), differenceIJ,);
+      //console.log("rVector is " + rVectorPart.x+", "+ rVectorPart.y +", "+rVectorPart.z);
+      let r = scalarTimes3DVector(rScalarPart,rVectorPart);
+      //console.log("vector called r = " + r.x+", "+ r.y +", "+r.z)
       let mu =  Math.min(1, pairWeight * etaT);
-      r = scalarTimes3DVector(r,mu);
+      //console.log("mu = " +mu);
+      r = scalarTimes3DVector(mu,r);
+      //console.log("vector called r = " + r.x+", "+ r.y +", "+r.z)
       this.graph.applyMotionVectorToNode(nodeIName,r)
-      let deltaJ =  scalarTimes3DVector(r,-1);
+      let deltaJ =  scalarTimes3DVector(-1, r);
       this.graph.applyMotionVectorToNode(nodeJName,deltaJ);
     }
     this.currIter++;

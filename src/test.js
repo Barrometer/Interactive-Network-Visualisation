@@ -8,15 +8,20 @@ let graph = new network.networkGraph();
 
 graph.addLink("A","B");
 graph.addLink("A","C");
-graph.addLink("A","G");
+/*graph.addLink("A","G");
 graph.addLink("B","D");
 graph.addLink("D","E");
 graph.addLink("C","E");
 graph.addLink("E","F");
-graph.addLink("F","G");
+graph.addLink("F","G");*/
 
-//graph.print();
-let mySGD2 = new sgd2.sgd2(graph,3);
-
-//mySGD2.graph.print();
-mySGD2.print();
+graph.randomiseNodeLocations();
+let mySGD2 = new sgd2.sgd2(graph,0.1,30);
+mySGD2.graph.print();
+//mySGD2.print();
+let i = 0, iters = 3;
+for (i;i<iters;i++){
+  mySGD2.sgd2Iteration();
+}
+//mySGD2.print();
+mySGD2.graph.print();
