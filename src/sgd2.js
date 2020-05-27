@@ -172,22 +172,19 @@ exports.sgd2 = class{
       /*
         r = (||Xi-Xj||-dij)/2 * (Xi-Xj/||Xi-Xj||)
       */
-      let differenceIJ = sub3DVector(nodeICoords,nodeJCoords);
-      //console.log("Difference is " + differenceIJ);
-      let normIJ = length3DVector(differenceIJ);
-      //console.log("Norm is " + normIJ);
-      let rScalarPart = (normIJ - idealDistance) / 2;
-      //console.log("rScalar is " + rScalarPart);
-      let rVectorPart = scalarTimes3DVector( (1 / normIJ), differenceIJ,);
-      //console.log("rVector is " + rVectorPart.x+", "+ rVectorPart.y +", "+rVectorPart.z);
-      let r = scalarTimes3DVector(rScalarPart,rVectorPart);
-      //console.log("vector called r = " + r.x+", "+ r.y +", "+r.z)
+      let differenceIJ = sub3DVector(nodeICoords,nodeJCoords);      
+      let normIJ = length3DVector(differenceIJ);   
+      let rScalarPart = (normIJ - idealDistance) / 2;      
+      let rVectorPart = scalarTimes3DVector( (1 / normIJ), differenceIJ,);     
+      let r = scalarTimes3DVector(rScalarPart,rVectorPart);      
       let mu =  Math.min(1, pairWeight * etaT);
-      //console.log("mu = " +mu);
+      
+      
       r = scalarTimes3DVector(mu,r);
-      //console.log("vector called r = " + r.x+", "+ r.y +", "+r.z)
-      this.graph.applyMotionVectorToNode(nodeIName,r)
-      let deltaJ =  scalarTimes3DVector(-1, r);
+      let deltaI =  scalarTimes3DVector(-1, r);
+      let deltaJ =  scalarTimes3DVector(1, r);
+      this.graph.applyMotionVectorToNode(nodeIName,deltaI)
+      
       this.graph.applyMotionVectorToNode(nodeJName,deltaJ);
     }
     this.currIter++;
