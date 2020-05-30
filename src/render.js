@@ -16,7 +16,7 @@ var eades = require("./forcedirected");
 var graphgenerator = require("./graphgenerator");
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 var dat = require("dat.gui");
-
+var sgd2 =  require("./sgd2");
 import greekData from "./../data/greek_gods.json";
 
 
@@ -27,32 +27,45 @@ let betterData = JSON.stringify(greekData);
 //INIT
 
 var INTERSECTED;
-var numIterations = 30;
 var myGenerator = new graphgenerator.dagGenerator(50,1.2);
 myGenerator.randomise();
 //var myGraph = myGenerator.graph;
 var myGraph = new network.networkGraph();
 myGraph.load(betterData);
 myGraph.randomiseNodeLocations();
-var meshMaterial = new THREE.MeshBasicMaterial({color:0xffff0});
+var meshMaterial = new THREE.MeshBasicMaterial({color:0xffff00});
 var meshGeometry = new THREE.BoxBufferGeometry(1,1,1);
 var mouse = new THREE.Vector2();
 var params = {
   c1: 5,
-  c2: 10,
-  c3: 10,
+  c2: 20,
+  c3: 20,
   c4: 0.1,
-  iterations: 100
+  eadesIters: 1000,
+  epsilon: 0.1,
+  distanceWeight: -2,
+  sgd2Iters: 30,
+  layoutMode: "Eades"
 }
 var myEades =  new eades.eadesForceSimulator(params.c1, params.c2, params.c3, params.c4);
+var mySGD2 =  new sgd2.sgd2(myGraph,params.epsilon,params.sgd2Iters);
 var loopCount = 0;
 var myGui = new dat.GUI();
+var modeController = myGui.add(params,"layoutMode",["Eades","Sgd2"])
+var guiEades =  myGui.addFolder("Eades Parameters")
+var c1Controller = guiEades.add(params,"c1",0,100);
+var c2Controller = guiEades.add(params,"c2",0,100);
+var c3Controller = guiEades.add(params,"c3",0,100);
+var c4Controller = guiEades.add(params,"c4",0,100);
+var eadesIterController = guiEades.add(params,"eadesIters");
 
-var c1Controller = myGui.add(params,"c1");
-var c2Controller = myGui.add(params,"c2");
-var c3Controller = myGui.add(params,"c3");
-var c4Controller = myGui.add(params,"c4");
-var iterController = myGui.add(params,"iterations");
+var guiSGD2 = myGui.addFolder("SGD2 Parameters");
+var weightExponentController = guiSGD2.add(params,"distanceWeight",-10,-1);
+var sgd2ItersController = guiSGD2.add(params,"sgd2Iters",0);
+//contoller callbacks
+modeController.onChange(function(value){
+  console.log("Changed, now using "+ value);
+})
 
 c1Controller.onFinishChange(function(value){
   myEades.c1 = value;
@@ -147,7 +160,7 @@ function animate(){
       myGraph.nodes.get(nodeName).print();
     }
   }
-  if(loopCount<params.iterations) {
+  if(loopCount<params.eadesIters) {
     loopCount++;
     myEades.simulatorStep(myGraph);
     //now to update node positions

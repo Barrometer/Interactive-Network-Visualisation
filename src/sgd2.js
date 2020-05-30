@@ -58,6 +58,11 @@ exports.sgd2 = class{
     this.negLambda = Math.log(this.etaMin/this.etaMax) / (this.maxIter - 1);
     this.currIter = 0;
   }
+  updateEpsilon(newValue){
+    this.epsilon =  newValue;
+    this.etaMin = this.epsilon/this.wMax;
+    this.negLambda = Math.log(this.etaMin/this.etaMax) / (this.maxIter - 1);
+  }
   /**
    * Updates the weight exponent used in calculations. Must be negative
    * @param {number} newWeight 
