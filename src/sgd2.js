@@ -57,6 +57,11 @@ exports.sgd2 = class{
      */
     this.negLambda = Math.log(this.etaMin/this.etaMax) / (this.maxIter - 1);
     this.currIter = 0;
+    /**
+     * This is the "ideal distance" between adjacent nodes
+     */
+    this.distanceScale = 10;
+    
   }
   updateEpsilon(newValue){
     this.epsilon =  newValue;
@@ -198,7 +203,7 @@ exports.sgd2 = class{
       let term = this.termMap.get(termName);
       let nodeIName = term.i;
       let nodeJName = term.j;
-      let idealDistance = term.distance;
+      let idealDistance = term.distance * this.distanceScale;
       let pairWeight = term.weight;
       
 

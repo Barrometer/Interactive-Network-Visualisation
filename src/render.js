@@ -45,7 +45,7 @@ var params = {
   epsilon: 0.1,
   distanceWeight: -2,
   sgd2Iters: 30,
-  layoutMode: "Eades",
+  layoutMode: "Sgd2",
   loopCount: 0,
   pause: false
 }
@@ -67,6 +67,10 @@ var guiSGD2 = myGui.addFolder("SGD2 Parameters");
 var weightExponentController = guiSGD2.add(params,"distanceWeight",-10,-1);
 var sgd2ItersController = guiSGD2.add(params,"sgd2Iters",0);
 //contoller callbacks
+sgd2ItersController.onFinishChange(function(value){
+  mySGD2.updateNumIters(value);
+})
+
 modeController.onChange(function(value){
   console.log("Changed, now using "+ value);
   params.loopCount = 0;
@@ -177,7 +181,9 @@ function animate(){
   }
   if((params.layoutMode=="Sgd2")&&(params.loopCount<params.sgd2Iters)&&!params.pause){
     params.loopCount++;
-    console.log("Should be doing SGD2, loopcount is "+params.loopCount )
+    mySGD2.sgd2Iteration();
+    myGraph = mySGD2.graph;
+    updateScene();
   }
   renderer.render(scene,camera)
 }
