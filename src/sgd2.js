@@ -79,13 +79,14 @@ exports.sgd2 = class{
     }
     this.weightExponent = newWeight;
     for (let termPair of this.termMap.values()){
-      termPair.weight = Math.pow(value.distance,this.weightExponent);
+      termPair.weight = Math.pow(termPair.distance,this.weightExponent);
     }
     this.wMin = Math.pow(this.dMax,this.weightExponent);
     this.wMax = Math.pow(this.dMin,this.weightExponent);
     this.etaMax = 1/this.wMin;
     this.etaMin = this.epsilon/this.wMax;
     this.negLambda = Math.log(this.etaMin/this.etaMax) / (this.maxIter - 1);
+    this.currIter = 0;
   }
   /**
    * Updates the new maximum number of iterations
@@ -102,6 +103,7 @@ exports.sgd2 = class{
   print(){
     console.log("dMin = " + this.dMin);
     console.log("dMax = " + this.dMax);
+    console.log("weight = " + this.weightExponent)
     for (let [key,value] of this.termMap){
       console.log("Term is called" + key +", distance is " + value.distance);
     }

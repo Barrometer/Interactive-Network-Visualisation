@@ -47,7 +47,8 @@ var params = {
   sgd2Iters: 30,
   layoutMode: "Sgd2",
   loopCount: 0,
-  pause: false
+  pause: false,
+  sdg2DistanceScale: 10
 }
 var myEades =  new eades.eadesForceSimulator(params.c1, params.c2, params.c3, params.c4);
 var mySGD2 =  new sgd2.sgd2(myGraph,params.epsilon,params.sgd2Iters);
@@ -66,14 +67,26 @@ var eadesIterController = guiEades.add(params,"eadesIters");
 var guiSGD2 = myGui.addFolder("SGD2 Parameters");
 var weightExponentController = guiSGD2.add(params,"distanceWeight",-10,-1);
 var sgd2ItersController = guiSGD2.add(params,"sgd2Iters",0);
+var sgd2DistanceScaleCont =  guiSGD2.add(params,"sdg2DistanceScale",1)
 //contoller callbacks
 sgd2ItersController.onFinishChange(function(value){
   mySGD2.updateNumIters(value);
+  //mySGD2.currIter = 0;
 })
-
+sgd2DistanceScaleCont.onFinishChange(function(value){
+  mySGD2.distanceScale = value;
+  params.loopCount = 0;
+  mySGD2.currIter=0;
+})
+weightExponentController.onFinishChange(function(value){
+  mySGD2.updateWeightCoeff(value);
+  mySGD2.currIter=0;
+  params.loopCount = 0;
+})
 modeController.onChange(function(value){
   console.log("Changed, now using "+ value);
   params.loopCount = 0;
+  mySGD2.currIter = 0;
 })
 
 c1Controller.onFinishChange(function(value){

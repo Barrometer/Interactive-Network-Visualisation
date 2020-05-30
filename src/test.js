@@ -17,9 +17,11 @@ graph.addLink("F","G");
 
 graph.randomiseNodeLocations();
 let mySGD2 = new sgd2.sgd2(graph,0.1,30);
+mySGD2.updateWeightCoeff(-3);
+mySGD2.print();
 mySGD2.graph.print();
 //mySGD2.print();
-let i = 0, iters = 300;
+let i = 0, iters = 30;
 for (i;i<iters;i++){
   mySGD2.sgd2Iteration();
 }
