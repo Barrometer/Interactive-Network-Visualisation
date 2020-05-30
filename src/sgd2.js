@@ -59,6 +59,34 @@ exports.sgd2 = class{
     this.currIter = 0;
   }
   /**
+   * Updates the weight exponent used in calculations. Must be negative
+   * @param {number} newWeight 
+   */
+  updateWeightCoeff(newWeight){
+    if(!(newWeight<0)){
+      console.log("invalid weight coeffictient")
+      return;
+    }
+    this.weightExponent = newWeight;
+    for (let termPair of this.termMap.values()){
+      termPair.weight = Math.pow(value.distance,this.weightExponent);
+    }
+    this.wMin = Math.pow(this.dMax,this.weightExponent);
+    this.wMax = Math.pow(this.dMin,this.weightExponent);
+    this.etaMax = 1/this.wMin;
+    this.etaMin = this.epsilon/this.wMax;
+    this.negLambda = Math.log(this.etaMin/this.etaMax) / (this.maxIter - 1);
+  }
+  /**
+   * Updates the new maximum number of iterations
+   * @param {number} newMax 
+   */
+  updateNumIters(newMax){
+    this.maxIter = newMax;
+    this.currIter = 0;
+    this.negLambda = Math.log(this.etaMin/this.etaMax) / (this.maxIter - 1);
+  }
+  /**
    * A test function that prints key data
    */
   print(){
@@ -143,6 +171,10 @@ exports.sgd2 = class{
    * Perform an iteration of SGD2
    */
   sgd2Iteration(){
+    if(this.currIter>=this.maxIter){
+      console.log("Finished, stop calling me");
+      return;
+    }
     //first want to shuffle terms
     this.shuffleFisherYates();
     //now want to go through each term, and apply an sgd2 step
