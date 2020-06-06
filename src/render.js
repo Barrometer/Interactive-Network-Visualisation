@@ -52,7 +52,9 @@ var params = {
 var myEades =  new eades.eadesForceSimulator(params.c1, params.c2, params.c3, params.c4);
 var mySGD2 =  new sgd2.sgd2(myGraph,params.epsilon,params.sgd2Iters);
 //var loopCount = 0;
-var myGui = new dat.GUI();
+var myGui = new dat.GUI({ autoPlace: false });
+var guiContainer =  document.getElementById("guiContainer");
+guiContainer.appendChild(myGui.domElement);
 var modeController = myGui.add(params,"layoutMode",["Eades","Sgd2"]);
 var loopListener = myGui.add(params,"loopCount").listen();
 var pauseGraph =  myGui.add(params,"pause");
@@ -135,7 +137,7 @@ renderer.setSize(divWidth,divHeight);
 container.appendChild(renderer.domElement);
 
 let scene = new THREE.Scene();
-
+scene.background =  new THREE.Color(0xf0f0f0);
 let camera = new THREE.PerspectiveCamera(45,divWidth/divHeight,1,500);
 camera.position.set( 0, 0, 100 );
 camera.lookAt( 0, 0, 0 );
@@ -192,6 +194,8 @@ nodeNamesAndCoords.forEach(function(value){
         INTERSECTED = intersects[0].object;
         let nodeName = intersects[0].object.name
         myGraph.nodes.get(nodeName).print();
+        let nodeText = myGraph.nodes.get(nodeName).toString();
+        document.getElementById("dataContainer").innerText = nodeText;
       }
     }
     if((params.layoutMode=="Eades")&&(params.loopCount<params.eadesIters)&&!params.pause){

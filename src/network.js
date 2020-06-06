@@ -34,6 +34,20 @@ class networkNode {
       console.log(`${property}: ${this.data[property]}`);
     }
   }
+
+  toString(){
+    let result = "Node called " + this.name +"\n";
+    result += "Node has co-ordinates [" +
+    this.coords.x.toPrecision(3) + ", " + this.coords.y.toPrecision(3) + ", " + 
+    this.coords.z.toPrecision(3) + "]\n";
+    result += "Node has data {";
+    for (const property in this.data) {
+      result += property + ": " + this.data[property] +", \n"
+    }
+    result += "}";
+
+    return result;
+  }
 }
 function makeLinkName(nodeNameFrom, nodeNameTo) {
   return "linkFrom_" + nodeNameFrom + "_To_" + nodeNameTo;

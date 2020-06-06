@@ -13,14 +13,28 @@
 				height: 100%;
 				right:0;
 				border: 1px solid black;
-				position: static, /* fixed or static */				
+				position: static; /* fixed or static */				
 			}
-
+			#dataContainer{
+				background-color: royalblue;
+				height: 100%;
+				width: 30%;
+				top: 0;
+				right: 0;
+				position: fixed;
+			}
+			#guiContainer{
+				position: absolute;
+				top: 0px;
+				left: 20px;
+				z-index: 1000;
+			}
 		</style>
 	</head>
 	<body>
 		<div id = "canvasContainer"></div>
-
+		<div id = "dataContainer"></div>
+		<div id = "guiContainer"></div>
 		<script src="main.js"></script>		
 	</body>
 </html>
