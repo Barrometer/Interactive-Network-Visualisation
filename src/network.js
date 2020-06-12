@@ -370,7 +370,7 @@ exports.networkGraph = class {
  * Function to convert Map with string key to an object
  * @param {Map<String,*>} strMap 
  */
-function strMapToObj(strMap){
+function strMapToObj(strMap){ //based on code from https://2ality.com/2015/08/es6-map-json.html
   let obj ={};
   for (let [key,value] of strMap){
     obj[key] = value;
