@@ -37,10 +37,10 @@ var meshGeometry = new THREE.BoxBufferGeometry(1,1,1);
 var mouse = new THREE.Vector2();
 var params = {
   c1: 5,
-  c2: 20,
-  c3: 20,
-  c4: 0.1,
-  eadesIters: 1000,
+  c2: 10,
+  c3: 10,
+  c4: 0.5,
+  eadesIters: 500,
   epsilon: 0.1,
   distanceWeight: -2,
   sgd2Iters: 30,
@@ -48,6 +48,7 @@ var params = {
   loopCount: 0,
   pause: false,
   reset: function(){resetFunction()},
+  twoDimensional: false,
   sdg2DistanceScale: 10
 }
 var myEades =  new eades.eadesForceSimulator(params.c1, params.c2, params.c3, params.c4);
@@ -60,6 +61,7 @@ var modeController = myGui.add(params,"layoutMode",["Eades","Sgd2"]);
 var loopListener = myGui.add(params,"loopCount").listen();
 var pauseGraph =  myGui.add(params,"pause");
 var resetController = myGui.add(params,"reset");
+var dimensionalityController = myGui.add(params,"twoDimensional");
 var guiEades =  myGui.addFolder("Eades Parameters")
 var c1Controller = guiEades.add(params,"c1",0,100);
 var c2Controller = guiEades.add(params,"c2",0,100);
@@ -74,6 +76,12 @@ var sgd2ItersController = guiSGD2.add(params,"sgd2Iters",0);
 var sgd2DistanceScaleCont =  guiSGD2.add(params,"sdg2DistanceScale",1);
 guiSGD2.open();
 //contoller callbacks
+dimensionalityController.onFinishChange(function(value){
+  myGraph.twoD = !myGraph.twoD;
+  myGraph.randomiseNodeLocations();
+  mySGD2.graph =  myGraph;
+});
+
 sgd2ItersController.onFinishChange(function(value){
   mySGD2.updateNumIters(value);
   //dodgy hack
@@ -86,6 +94,8 @@ weightExponentController.onFinishChange(function(value){
   mySGD2.updateWeightCoeff(value);
 })
 modeController.onChange(function(value){
+  myGraph.randomiseNodeLocations();
+  mySGD2.graph =  myGraph;
   console.log("Changed, now using "+ value);
 })
 
@@ -233,6 +243,8 @@ function updateScene(){
   });
 }
 function resetFunction() {
+  myGraph.randomiseNodeLocations();
+  mySGD2.graph =  myGraph;
   params.loopCount = 0;
   mySGD2.currIter=0;
 }

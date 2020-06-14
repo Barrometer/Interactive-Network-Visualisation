@@ -80,6 +80,10 @@ exports.networkGraph = class {
      * @type {Map<String,networkLink>}
      */
     this.links = new Map(); 
+    /**
+     * @type {boolean} a toggle for whether the graph is 2D or not
+     */
+    this.twoD = false;
   }
   /**
   * If there is not a node by this name in the network, adds it to the network
@@ -313,6 +317,9 @@ exports.networkGraph = class {
       let randX = Math.random() * (numberOfNodes*2)-numberOfNodes;
       let randY = Math.random() * (numberOfNodes*2)-numberOfNodes;
       let randZ = Math.random() * (numberOfNodes*2)-numberOfNodes;
+      if(this.twoD){
+        randZ = 0;
+      }
       let newCoords = {x: randX, y: randY, z: randZ};
       value.coords = newCoords;
     }
