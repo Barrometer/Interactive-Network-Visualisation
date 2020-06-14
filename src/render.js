@@ -47,6 +47,7 @@ var params = {
   layoutMode: "Sgd2",
   loopCount: 0,
   pause: false,
+  reset: function(){resetFunction()},
   sdg2DistanceScale: 10
 }
 var myEades =  new eades.eadesForceSimulator(params.c1, params.c2, params.c3, params.c4);
@@ -58,60 +59,51 @@ guiContainer.appendChild(myGui.domElement);
 var modeController = myGui.add(params,"layoutMode",["Eades","Sgd2"]);
 var loopListener = myGui.add(params,"loopCount").listen();
 var pauseGraph =  myGui.add(params,"pause");
+var resetController = myGui.add(params,"reset");
 var guiEades =  myGui.addFolder("Eades Parameters")
 var c1Controller = guiEades.add(params,"c1",0,100);
 var c2Controller = guiEades.add(params,"c2",0,100);
 var c3Controller = guiEades.add(params,"c3",0,100);
 var c4Controller = guiEades.add(params,"c4",0,100);
 var eadesIterController = guiEades.add(params,"eadesIters");
+guiEades.open();
 
 var guiSGD2 = myGui.addFolder("SGD2 Parameters");
 var weightExponentController = guiSGD2.add(params,"distanceWeight",-10,-1);
 var sgd2ItersController = guiSGD2.add(params,"sgd2Iters",0);
-var sgd2DistanceScaleCont =  guiSGD2.add(params,"sdg2DistanceScale",1)
+var sgd2DistanceScaleCont =  guiSGD2.add(params,"sdg2DistanceScale",1);
+guiSGD2.open();
 //contoller callbacks
 sgd2ItersController.onFinishChange(function(value){
   mySGD2.updateNumIters(value);
-  //mySGD2.currIter = 0;
+  //dodgy hack
+  params.loopCount = value;
 })
 sgd2DistanceScaleCont.onFinishChange(function(value){
   mySGD2.distanceScale = value;
-  params.loopCount = 0;
-  mySGD2.currIter=0;
 })
 weightExponentController.onFinishChange(function(value){
   mySGD2.updateWeightCoeff(value);
-  mySGD2.currIter=0;
-  params.loopCount = 0;
 })
 modeController.onChange(function(value){
   console.log("Changed, now using "+ value);
-  params.loopCount = 0;
-  mySGD2.currIter = 0;
 })
 
 c1Controller.onFinishChange(function(value){
   myEades.c1 = value;
-  params.loopCount = 0;
-  
 });
 
 c2Controller.onFinishChange(function(value){
   myEades.c2 = value;
-  params.loopCount = 0;
-  
+
 });
 
 c3Controller.onFinishChange(function(value){
   myEades.c3 = value;
-  params.loopCount = 0;
-  
 });
 
 c4Controller.onFinishChange(function(value){
   myEades.c4 = value;
-  params.loopCount = 0;
-  
 });
 
 var nodeNamesAndCoords = myGraph.getNodeNamesAndCoords();
@@ -172,71 +164,75 @@ nodeNamesAndCoords.forEach(function(value){
     scene.add(arrow);
   });
   
-  animate();
-  //function definitions
-  
-  function onMouseMove( event ) {
-  
-      // calculate mouse position in normalized device coordinates
-      // (-1 to +1) for both components
-  
-    mouse.x = ( ( event.clientX - renderer.domElement.offsetLeft ) / renderer.domElement.clientWidth ) * 2 - 1;
-    mouse.y = - ( ( event.clientY - renderer.domElement.offsetTop ) / renderer.domElement.clientHeight ) * 2 + 1;
-  
-  }
-  function animate(){
-    requestAnimationFrame(animate);
-    controls.update();
-    raycaster.setFromCamera(mouse,camera);
-    var intersects = raycaster.intersectObjects(scene.children);
-    if (intersects.length > 0) {
-      if(intersects[0].object!=INTERSECTED){
-        INTERSECTED = intersects[0].object;
-        let nodeName = intersects[0].object.name
-        myGraph.nodes.get(nodeName).print();
-        let nodeText = myGraph.nodes.get(nodeName).toString();
-        document.getElementById("dataContainer").innerText = nodeText;
-      }
+animate();
+//function definitions
+
+function onMouseMove( event ) {
+
+    // calculate mouse position in normalized device coordinates
+    // (-1 to +1) for both components
+
+  mouse.x = ( ( event.clientX - renderer.domElement.offsetLeft ) / renderer.domElement.clientWidth ) * 2 - 1;
+  mouse.y = - ( ( event.clientY - renderer.domElement.offsetTop ) / renderer.domElement.clientHeight ) * 2 + 1;
+
+}
+function animate(){
+  requestAnimationFrame(animate);
+  controls.update();
+  raycaster.setFromCamera(mouse,camera);
+  var intersects = raycaster.intersectObjects(scene.children);
+  if (intersects.length > 0) {
+    if(intersects[0].object!=INTERSECTED){
+      INTERSECTED = intersects[0].object;
+      let nodeName = intersects[0].object.name
+      myGraph.nodes.get(nodeName).print();
+      let nodeText = myGraph.nodes.get(nodeName).toString();
+      document.getElementById("dataContainer").innerText = nodeText;
     }
-    if((params.layoutMode=="Eades")&&(params.loopCount<params.eadesIters)&&!params.pause){
-      params.loopCount++;
-      myEades.simulatorStep(myGraph);
-      //now to update node positions
-      updateScene();
-    }
-    if((params.layoutMode=="Sgd2")&&(params.loopCount<params.sgd2Iters)&&!params.pause){
-      params.loopCount++;
-      mySGD2.sgd2Iteration();
-      myGraph = mySGD2.graph;
-      updateScene();
-    }
-    renderer.render(scene,camera)
   }
-  
-  function updateScene(){
-    nodeArray.forEach(function(renderedNode){
-      let nodeName = renderedNode.name;
-      let nodeCoords = myGraph.getNodeCoord(nodeName);
-      
-      renderedNode.position.x = nodeCoords.x;
-      renderedNode.position.y = nodeCoords.y;
-      renderedNode.position.z = nodeCoords.z;
-      
-    });
-    lineArray.forEach(function(renderedLine){
-      let lineName = renderedLine.name;
-      let lineCoords = myGraph.getLineCoords(lineName);
-      
-      let from = lineCoords.from;
-      let to = lineCoords.to;
-      let dir = new THREE.Vector3(to.x - from.x, to.y - from.y, to.z -  from.z);
-      let length = dir.length();
-      dir.normalize();
-      let origin =  new THREE.Vector3(from.x,from.y,from.z);
-      renderedLine.position.copy(origin);
-      renderedLine.setDirection(dir);
-      renderedLine.setLength(length,1,1);
-      
-      
-    });
+  if((params.layoutMode=="Eades")&&(params.loopCount<params.eadesIters)&&!params.pause){
+    params.loopCount++;
+    myEades.simulatorStep(myGraph);
+    //now to update node positions
+    updateScene();
   }
+  if((params.layoutMode=="Sgd2")&&(params.loopCount<params.sgd2Iters)&&!params.pause){
+    params.loopCount++;
+    mySGD2.sgd2Iteration();
+    myGraph = mySGD2.graph;
+    updateScene();
+  }
+  renderer.render(scene,camera)
+}
+
+function updateScene(){
+  nodeArray.forEach(function(renderedNode){
+    let nodeName = renderedNode.name;
+    let nodeCoords = myGraph.getNodeCoord(nodeName);
+    
+    renderedNode.position.x = nodeCoords.x;
+    renderedNode.position.y = nodeCoords.y;
+    renderedNode.position.z = nodeCoords.z;
+    
+  });
+  lineArray.forEach(function(renderedLine){
+    let lineName = renderedLine.name;
+    let lineCoords = myGraph.getLineCoords(lineName);
+    
+    let from = lineCoords.from;
+    let to = lineCoords.to;
+    let dir = new THREE.Vector3(to.x - from.x, to.y - from.y, to.z -  from.z);
+    let length = dir.length();
+    dir.normalize();
+    let origin =  new THREE.Vector3(from.x,from.y,from.z);
+    renderedLine.position.copy(origin);
+    renderedLine.setDirection(dir);
+    renderedLine.setLength(length,1,1);
+    
+    
+  });
+}
+function resetFunction() {
+  params.loopCount = 0;
+  mySGD2.currIter=0;
+}
