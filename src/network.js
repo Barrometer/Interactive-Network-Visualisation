@@ -36,7 +36,7 @@ class networkNode {
   }
 
   toString(){
-    let result = "Node called " + this.name +"\n";
+    let result = "\n\nNode called " + this.name +"\n";
     result += "Node has co-ordinates [" +
     this.coords.x.toPrecision(3) + ", " + this.coords.y.toPrecision(3) + ", " + 
     this.coords.z.toPrecision(3) + "]\n";

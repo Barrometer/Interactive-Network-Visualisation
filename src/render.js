@@ -16,6 +16,7 @@ var graphgenerator = require("./graphgenerator");
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 var dat = require("dat.gui");
 var sgd2 =  require("./sgd2");
+var Stats =  require("stats.js")
 import greekData from "./../data/greek_gods.json";
 
 
@@ -24,14 +25,22 @@ let betterData = JSON.stringify(greekData);
 //console.log(betterData);
 
 //UI INIT
-
+var stats =  new Stats();
+stats.showPanel(0);
+let statsContainer = document.getElementById("statsContainer");
+statsContainer.appendChild(stats.dom);
 var INTERSECTED;
-var myGenerator = new graphgenerator.dagGenerator(50,1.2);
+var myGenerator = new graphgenerator.dagGenerator(75,1.2);
 myGenerator.randomise();
-//var myGraph = myGenerator.graph;
-var myGraph = new network.networkGraph();
-myGraph.load(betterData);
-myGraph.randomiseNodeLocations();
+var myRandomGraph = myGenerator.graph;
+var myFamilyTreeGraph = new network.networkGraph();
+myFamilyTreeGraph.load(betterData);
+myFamilyTreeGraph.randomiseNodeLocations();
+var myGraph;
+myGraph =  myFamilyTreeGraph;
+console.log("Number of vertices = " + myGraph.nodes.size);
+console.log("Number of edges = " + myGraph.links.size);
+//myGraph.print();
 var meshMaterial = new THREE.MeshBasicMaterial({color:0xffff00});
 var meshGeometry = new THREE.BoxBufferGeometry(1,1,1);
 var mouse = new THREE.Vector2();
@@ -47,18 +56,23 @@ var params = {
   layoutMode: "Sgd2",
   loopCount: 0,
   pause: false,
+  useRandomGraph: false,
   reset: function(){resetFunction()},
   twoDimensional: false,
   sdg2DistanceScale: 10
 }
 var myEades =  new eades.eadesForceSimulator(params.c1, params.c2, params.c3, params.c4);
+var t0 = performance.now();
 var mySGD2 =  new sgd2.sgd2(myGraph,params.epsilon,params.sgd2Iters);
+var t1 = performance.now();
+console.log("sgd2 init took " + (t1-t0 + "ms"))
 //var loopCount = 0;
 var myGui = new dat.GUI({ autoPlace: false });
 var guiContainer =  document.getElementById("guiContainer");
 guiContainer.appendChild(myGui.domElement);
 var modeController = myGui.add(params,"layoutMode",["Eades","Sgd2"]);
 var loopListener = myGui.add(params,"loopCount").listen();
+//var graphUsageController = myGui.add(params,"useRandomGraph");
 var pauseGraph =  myGui.add(params,"pause");
 var resetController = myGui.add(params,"reset");
 var dimensionalityController = myGui.add(params,"twoDimensional");
@@ -76,6 +90,21 @@ var sgd2ItersController = guiSGD2.add(params,"sgd2Iters",0);
 var sgd2DistanceScaleCont =  guiSGD2.add(params,"sdg2DistanceScale",1);
 guiSGD2.open();
 //contoller callbacks
+
+/* // currently non functional, need to clear scene.
+graphUsageController.onFinishChange(function(value){
+  console.log(value);
+  if(value){// ie switching to use a random graph
+    myGraph = myRandomGraph;
+    myGraph.randomiseNodeLocations();
+    mySGD2 =  new sgd2.sgd2(myGraph,params.epsilon,params.sgd2Iters);
+  }
+  else{
+    myGraph = myFamilyTreeGraph;
+    myGraph.randomiseNodeLocations();
+    mySGD2 =  new sgd2.sgd2(myGraph,params.epsilon,params.sgd2Iters);
+  }
+});*/
 dimensionalityController.onFinishChange(function(value){
   myGraph.twoD = !myGraph.twoD;
   myGraph.randomiseNodeLocations();
@@ -187,6 +216,7 @@ function onMouseMove( event ) {
 
 }
 function animate(){
+  stats.begin();
   requestAnimationFrame(animate);
   controls.update();
   raycaster.setFromCamera(mouse,camera);
@@ -213,6 +243,7 @@ function animate(){
     updateScene();
   }
   renderer.render(scene,camera)
+  stats.end();
 }
 
 function updateScene(){

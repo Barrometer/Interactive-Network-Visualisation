@@ -20,6 +20,7 @@
   "homepage": "https://github.com/Barrometer/FinalYearProject#readme",
   "dependencies": {
     "dat.gui": "^0.7.7",
+    "stats.js": "^0.17.0",
     "three": "^0.116.1"
   },
   "devDependencies": {
