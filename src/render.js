@@ -126,6 +126,8 @@ modeController.onChange(function(value){
   myGraph.randomiseNodeLocations();
   mySGD2.graph =  myGraph;
   console.log("Changed, now using "+ value);
+  params.loopCount = 0;
+  mySGD2.currIter=0;
 })
 
 c1Controller.onFinishChange(function(value){
