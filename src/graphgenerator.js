@@ -67,7 +67,7 @@ function getRandomInt(min,max) {
  * @param {number} lambda parameter for lambda distribution
  */
 function uniformToExponential(x,lambda) {
-  // general approach as described here https://stats.stackexchange.com/a/234569
+  // general approach is described here https://stats.stackexchange.com/a/234569
   // if x is uniform [a,b] then -1/k * ln ((x-a)/(b-a)) is exponential with parameter k
   let logPart = Math.log(x);
   let expVarb = logPart / lambda * -1;

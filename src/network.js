@@ -34,7 +34,9 @@ class networkNode {
       console.log(`${property}: ${this.data[property]}`);
     }
   }
-
+  /**
+   * Converts the node to a string for output to the user
+   */
   toString(){
     let result = "\n\nNode called " + this.name +"\n";
     result += "Node has co-ordinates [" +
@@ -49,6 +51,11 @@ class networkNode {
     return result;
   }
 }
+/**
+ * A helper function to generate edge names
+ * @param {string} nodeNameFrom 
+ * @param {string} nodeNameTo 
+ */
 function makeLinkName(nodeNameFrom, nodeNameTo) {
   return "linkFrom_" + nodeNameFrom + "_To_" + nodeNameTo;
 }
@@ -81,7 +88,8 @@ exports.networkGraph = class {
      */
     this.links = new Map(); 
     /**
-     * @type {boolean} a toggle for whether the graph is 2D or not
+     * a toggle for whether the graph is 2D or not
+     * @type {boolean} 
      */
     this.twoD = false;
   }
@@ -239,7 +247,7 @@ exports.networkGraph = class {
     }
   }
   /**
-   * Prints out the networkGraph in a pretty format
+   * Prints out the networkGraph in a pretty format to the console
    */
   print() {
       for (let [key,value] of this.nodes) {
@@ -289,7 +297,7 @@ exports.networkGraph = class {
     return {nodes: nodesObj, links: linksObjs};
   }
   /**
-   * 
+   * A function to load a graph fron a JSON string
    * @param {string} stringifiedJSONData 
    */
   load(stringifiedJSONData){
@@ -309,6 +317,10 @@ exports.networkGraph = class {
       this.addLink(linkToAdd.from,linkToAdd.to);
     }
   }
+  /**
+   * Randomly positions the nodes of a graph in a square of side length n
+   * centred at the origin, where n is the number of nodes
+   */
   randomiseNodeLocations(){
     let numberOfNodes = this.nodes.size;
     //basic strategy as follows: randomly position nodes in a square of radius n
@@ -317,6 +329,7 @@ exports.networkGraph = class {
       let randX = Math.random() * (numberOfNodes*2)-numberOfNodes;
       let randY = Math.random() * (numberOfNodes*2)-numberOfNodes;
       let randZ = Math.random() * (numberOfNodes*2)-numberOfNodes;
+      //two dimensional controller
       if(this.twoD){
         randZ = 0;
       }
@@ -360,7 +373,11 @@ exports.networkGraph = class {
       return null;
     }
   }
-
+  /**
+   * Given a valid line name, returns an object with the coordinates of
+   * the source and target nodes
+   * @param {string} lineName 
+   */
   getLineCoords(lineName) {
     if(this.links.has(lineName)){
       let line = this.links.get(lineName);
@@ -385,7 +402,7 @@ function strMapToObj(strMap){ //based on code from https://2ality.com/2015/08/es
   return obj;
 }
 /**
- * 
+ * Function to add 3d vectors
  * @param {object} coord1
  * @param {number} coord1.x
  * @param {number} coord1.y

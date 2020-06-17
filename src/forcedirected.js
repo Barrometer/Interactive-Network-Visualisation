@@ -36,7 +36,7 @@ exports.eadesForceSimulator = class{
       Also repel
     */
    
-   let forcesArray = [];
+   let forcesArray = []; // net force on each node
     for (let[key1,node1] of graph.nodes) {
       let forceOnNode = {x: 0, y:0, z: 0};
       let node1Position = node1.coords;

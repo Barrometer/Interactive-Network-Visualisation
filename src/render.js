@@ -1,5 +1,5 @@
 /**
- * Front end file, handles rendering and UI
+ * Front end file, handles rendering and UI, and is the start of the bundling process
  */
 
 /**
@@ -17,33 +17,40 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 var dat = require("dat.gui");
 var sgd2 =  require("./sgd2");
 var Stats =  require("stats.js")
-import greekData from "./../data/greek_gods.json";
+import greekData from "./../data/greek_gods.json"; //alter to change loaded data
 
 
 
 let betterData = JSON.stringify(greekData);
 //console.log(betterData);
 
-//UI INIT
+//UI and Graph Initialisation 
 var stats =  new Stats();
 stats.showPanel(0);
 let statsContainer = document.getElementById("statsContainer");
 statsContainer.appendChild(stats.dom);
-var INTERSECTED;
+//fps / memory tracker now attached
+var INTERSECTED; // stores the last intersected node
+
+//random generator
 var myGenerator = new graphgenerator.dagGenerator(75,1.2);
 myGenerator.randomise();
 var myRandomGraph = myGenerator.graph;
+
+//loaded data
 var myFamilyTreeGraph = new network.networkGraph();
 myFamilyTreeGraph.load(betterData);
 myFamilyTreeGraph.randomiseNodeLocations();
+
+//the graph used throughout the rest of the program
 var myGraph;
 myGraph =  myFamilyTreeGraph;
-console.log("Number of vertices = " + myGraph.nodes.size);
-console.log("Number of edges = " + myGraph.links.size);
-//myGraph.print();
-var meshMaterial = new THREE.MeshBasicMaterial({color:0xffff00});
-var meshGeometry = new THREE.BoxBufferGeometry(1,1,1);
-var mouse = new THREE.Vector2();
+
+var meshMaterial = new THREE.MeshBasicMaterial({color:0xffff00}); // node colour
+var meshGeometry = new THREE.BoxBufferGeometry(1,1,1); // node shape
+var mouse = new THREE.Vector2(); // used as part of interaction
+
+//used as part of UI controllers
 var params = {
   c1: 5,
   c2: 10,
@@ -61,17 +68,22 @@ var params = {
   twoDimensional: false,
   sdg2DistanceScale: 10
 }
+
 var myEades =  new eades.eadesForceSimulator(params.c1, params.c2, params.c3, params.c4);
+
+//testing sgd2 initialisation
 var t0 = performance.now();
 var mySGD2 =  new sgd2.sgd2(myGraph,params.epsilon,params.sgd2Iters);
 var t1 = performance.now();
-console.log("sgd2 init took " + (t1-t0 + "ms"))
-//var loopCount = 0;
+console.log("sgd2 init took " + (t1-t0 + "ms")); //prints to dev console, not shown to user
+
+//gui and controllers using dat.gui
 var myGui = new dat.GUI({ autoPlace: false });
 var guiContainer =  document.getElementById("guiContainer");
 guiContainer.appendChild(myGui.domElement);
 var modeController = myGui.add(params,"layoutMode",["Eades","Sgd2"]);
 var loopListener = myGui.add(params,"loopCount").listen();
+//disabled below as overall functionality broken
 //var graphUsageController = myGui.add(params,"useRandomGraph");
 var pauseGraph =  myGui.add(params,"pause");
 var resetController = myGui.add(params,"reset");
@@ -89,7 +101,9 @@ var weightExponentController = guiSGD2.add(params,"distanceWeight",-10,-1);
 var sgd2ItersController = guiSGD2.add(params,"sgd2Iters",0);
 var sgd2DistanceScaleCont =  guiSGD2.add(params,"sdg2DistanceScale",1);
 guiSGD2.open();
-//contoller callbacks
+//controller callbacks
+//controller callbacks are called when the user alters a value
+
 
 /* // currently non functional, need to clear scene.
 graphUsageController.onFinishChange(function(value){
@@ -125,7 +139,7 @@ weightExponentController.onFinishChange(function(value){
 modeController.onChange(function(value){
   myGraph.randomiseNodeLocations();
   mySGD2.graph =  myGraph;
-  console.log("Changed, now using "+ value);
+  //console.log("Changed, now using "+ value);
   params.loopCount = 0;
   mySGD2.currIter=0;
 })
@@ -147,6 +161,7 @@ c4Controller.onFinishChange(function(value){
   myEades.c4 = value;
 });
 
+//arrays to store names of lines and nodes
 var nodeNamesAndCoords = myGraph.getNodeNamesAndCoords();
 var lineNamesAndCoords = myGraph.getLineNamesAndCoords();
 
@@ -158,13 +173,17 @@ var nodeArray = [];
  * @type {Array.<THREE.ArrowHelper>}
  */
 var lineArray = [];
+
+//ui handling, will attach renderer correctly
 let container = document.getElementById("canvasContainer");
 document.body.appendChild(container);
 
 let divWidth =  document.getElementById("canvasContainer").offsetWidth;
 let divHeight = document.getElementById("canvasContainer").offsetHeight;
-console.log("Width = " + divWidth);
-console.log("Height = " + divHeight);
+//console.log("Width = " + divWidth);
+//console.log("Height = " + divHeight);
+
+//set up of three.js renderer, camera, and scene
 let renderer = new THREE.WebGLRenderer();
 renderer.setSize(divWidth,divHeight);
 container.appendChild(renderer.domElement);
@@ -175,13 +194,15 @@ let camera = new THREE.PerspectiveCamera(45,divWidth/divHeight,1,500);
 camera.position.set( 0, 0, 100 );
 camera.lookAt( 0, 0, 0 );
 
-var raycaster = new THREE.Raycaster();
+var raycaster = new THREE.Raycaster(); // used as part of mouse over
 
+// a prebuilt module in Three.js handling rotating etc
 var controls = new OrbitControls(camera,renderer.domElement);
 controls.update();
+
 document.addEventListener("mousemove",onMouseMove,false);
 
-//want to create objects for all nodes / lines
+//want to create objects in scene for all nodes / lines
 nodeNamesAndCoords.forEach(function(value){
     var cube = new THREE.Mesh(meshGeometry,meshMaterial);
     cube.position.x = value.coords.x;
@@ -206,6 +227,8 @@ nodeNamesAndCoords.forEach(function(value){
   });
   
 animate();
+
+
 //function definitions
 
 function onMouseMove( event ) {
@@ -218,7 +241,7 @@ function onMouseMove( event ) {
 
 }
 function animate(){
-  stats.begin();
+  stats.begin(); // start of fps timing
   requestAnimationFrame(animate);
   controls.update();
   raycaster.setFromCamera(mouse,camera);
@@ -242,12 +265,17 @@ function animate(){
     params.loopCount++;
     mySGD2.sgd2Iteration();
     myGraph = mySGD2.graph;
+    //now to update node positions
     updateScene();
   }
   renderer.render(scene,camera)
-  stats.end();
+  stats.end(); // end of fps timing
 }
 
+/**
+ * A function called to update the scene when the underlying graphs
+ * is modiifed by the graph drawing algorithms
+ */
 function updateScene(){
   nodeArray.forEach(function(renderedNode){
     let nodeName = renderedNode.name;
@@ -275,6 +303,9 @@ function updateScene(){
     
   });
 }
+/**
+ * A function called when resetting the state of the graph
+ */
 function resetFunction() {
   myGraph.randomiseNodeLocations();
   mySGD2.graph =  myGraph;
